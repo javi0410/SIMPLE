@@ -80,7 +80,7 @@ class BlokusEnv(gym.Env):
         return np.array(legal_actions)
 
     def is_legal(self, action_num):
-        reshaped_boar = self.board.reshape(self.grid_shape)
+        reshaped_boar = np.array(self.board).reshape(self.grid_shape)
         movements = all_moves(self.num_squares)
         movement = movements[action_num]
         square, piece_id, piece_super_id, grid = movement
@@ -208,7 +208,7 @@ class BlokusEnv(gym.Env):
                 reward = [1] * self.n_players
                 reward[self.current_player_num] = -1
             else:
-                reshaped_boar = self.board.reshape(self.grid_shape)
+                reshaped_boar = np.array(self.board).reshape(self.grid_shape)
                 movements = all_moves(self.num_squares)
                 movement = movements[action]
                 square, piece_id, piece_super_id, grid = movement
@@ -217,7 +217,7 @@ class BlokusEnv(gym.Env):
                 for coordinates in grid:
                     coord_x, coord_y = coordinates
                     reshaped_boar[x + coord_x][y + coord_y] = self.current_player.token
-                self.board = reshaped_boar.reshape(self.num_squares)
+                self.board = reshaped_boar.reshape(self.num_squares).tolist()
 
                 self.turns_taken += 1
                 r, done = self.check_game_over()
