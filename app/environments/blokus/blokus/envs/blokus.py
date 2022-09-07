@@ -238,7 +238,7 @@ class BlokusEnv(gym.Env):
         # self.board[self.num_squares - self.cols - 1] = [Token('r', 7)]
         # self.board[-1] = [Token('y', 8)]
 
-        pieces = [Piece(i) for i in simple_pieces]
+        pieces = [Piece(*i) for i in simple_pieces]
         self.players = [Player(0, Token('b', 1), copy.deepcopy(pieces)),
                         Player(1, Token('g', 2), copy.deepcopy(pieces)),
                         Player(2, Token('r', 3), copy.deepcopy(pieces)),
