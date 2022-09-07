@@ -32,6 +32,7 @@ class Player():
         self.id = id
         self.token = token
         self.pieces = pieces_super_id_list
+        self.super_id_pieces = [p.super_id for p in self.pieces]
         self.partial_points = 0
         self.eliminated = False
         self.has_started = has_started
@@ -87,8 +88,8 @@ class BlokusEnv(gym.Env):
         square, piece_id, piece_super_id, grid = movement
         x, y = int(square / self.rows), square % self.cols
         logger.debug(f"Comprobando que el jugador pose la pieza {piece_super_id}")
-        logger.debug(f"Las piezas del jugador {self.players[self.current_player_num].pieces}")
-        if piece_super_id in self.players[self.current_player_num].pieces: #El jugador posee la ficha
+        logger.debug(f"Las piezas del jugador {self.players[self.current_player_num].super_id_pieces}")
+        if piece_super_id in self.players[self.current_player_num].super_id_pieces: #El jugador posee la ficha
             logger.debug(f"Comprobando que el jugador pose la pieza {piece_super_id}")
             for coordinates in grid:  # Chequeo casilla en blanco
                 coord_x, coord_y = coordinates
