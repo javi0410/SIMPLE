@@ -88,7 +88,7 @@ class BlokusEnv(gym.Env):
         x, y = int(square / self.rows), square % self.cols
 
         if piece_super_id in self.players[self.current_player_num].pieces: #El jugador posee la ficha
-            print(f"Comprobando que el jugador pose la pieza {piece_super_id}")
+            logger.debug(f"Comprobando que el jugador pose la pieza {piece_super_id}")
             for coordinates in grid:  # Chequeo casilla en blanco
                 coord_x, coord_y = coordinates
                 try:
@@ -120,10 +120,10 @@ class BlokusEnv(gym.Env):
                     continue
 
             for coordinates in grid:  # Chequeo alguna diagonal del color del jugador (hot cells)
-                print("Comprobando las hotcells")
+                logger.debug("Comprobando las hotcells")
                 coord_x, coord_y = coordinates
                 if not self.players[self.current_player_num].has_started:  # Primera pieza que coloca el jugador
-                    print(f"El jugador {self.current_player_num}  aun no ha empezado")
+                    logger.debug(f"El jugador {self.current_player_num}  aun no ha empezado")
                     if self.current_player.token.symbol == "b" and x + coord_x == 0 and y + coord_y == 0:
                         return 1
                     elif self.current_player.token.symbol == "g" and x + coord_x == self.rows - 1 and y + coord_y == 0:
