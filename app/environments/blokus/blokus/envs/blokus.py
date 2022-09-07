@@ -2,11 +2,17 @@ import gym
 import copy
 import numpy as np
 from blokus.envs.constants import simple_pieces
-from blokus.envs.utils import all_moves
 import config
 
 from stable_baselines import logger
 
+
+def all_moves(num_squares):
+    moves = []
+    for i in range(num_squares):
+        for j in simple_pieces:
+            moves.append([i] + j)
+    return moves
 
 class Piece():
     def __init__(self, id, super_id, matrix):
