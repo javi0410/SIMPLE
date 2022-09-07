@@ -29,7 +29,7 @@ class Token():
 
 class Player():
     def __init__(self, id, token, pieces_super_id_list):
-        self.id
+        self.id = id
         self.token = token
         self.pieces = pieces_super_id_list
         self.partial_points = 0
