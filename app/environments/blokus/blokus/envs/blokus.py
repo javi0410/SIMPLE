@@ -28,12 +28,13 @@ class Token():
 
 
 class Player():
-    def __init__(self, id, token, pieces_super_id_list):
+    def __init__(self, id, token, pieces_super_id_list, has_started=False):
         self.id = id
         self.token = token
         self.pieces = pieces_super_id_list
         self.partial_points = 0
         self.eliminated = False
+        self.has_started = has_started
 
 
 class BlokusEnv(gym.Env):
@@ -85,7 +86,8 @@ class BlokusEnv(gym.Env):
         movement = movements[action_num]
         square, piece_id, piece_super_id, grid = movement
         x, y = int(square / self.rows), square % self.cols
-        if piece_super_id in self.players[self.current_player_num].pieces:
+
+        if piece_super_id in self.players[self.current_player_num].pieces: #El jugador posee la ficha
             for coordinates in grid:  # Chequeo casilla en blanco
                 coord_x, coord_y = coordinates
                 try:
@@ -93,7 +95,7 @@ class BlokusEnv(gym.Env):
                         return 0
                 except:
                     return 0
-            for coordinates in grid:  # Chequeo ortogonales diferentes al color del jugador
+            for coordinates in grid:  # Chequeo adyacentes diferentes al color del jugador
                 coord_x, coord_y = coordinates
                 try:
                     if reshaped_boar[x + coord_x + 1][y + coord_y].number == self.current_player.token.number:
@@ -115,8 +117,20 @@ class BlokusEnv(gym.Env):
                         return 0
                 except:
                     continue
+
             for coordinates in grid:  # Chequeo alguna diagonal del color del jugador (hot cells)
                 coord_x, coord_y = coordinates
+                if not self.players[self.current_player_num].has_started:  # Primera pieza que coloca el jugador
+                    if self.current_player.token.number == "b" and x + coord_x == 0 and y + coord_y == 0:
+                        return 1
+                    elif self.current_player.token.number == "g" and x + coord_x == self.rows - 1 and y + coord_y == 0:
+                        return 1
+                    elif self.current_player.token.number == "r" and x + coord_x == 0 and y + coord_y == self.cols - 1:
+                        return 1
+                    elif self.current_player.token.number == "y" and x + coord_x == self.rows - 1 and y + coord_y == self.cols - 1:
+                        return 1
+                    else:
+                        return 0
                 try:
                     if reshaped_boar[x + coord_x + 1][y + coord_y + 1].number == self.current_player.token.number:
                         return 1
@@ -137,16 +151,6 @@ class BlokusEnv(gym.Env):
                         return 1
                 except:
                     continue
-                if self.current_player.token.number == "b" and x + coord_x == 0 and y + coord_y == 0:
-                    return 1
-                elif self.current_player.token.number == "g" and x + coord_x == self.rows - 1 and y + coord_y == 0:
-                    return 1
-                elif self.current_player.token.number == "r" and x + coord_x == 0 and y + coord_y == self.cols - 1:
-                    return 1
-                elif self.current_player.token.number == "y" and x + coord_x == self.rows - 1 and y + coord_y == self.cols - 1:
-                    return 1
-                else:
-                    return 0
         else:
             return 0
 
@@ -225,6 +229,7 @@ class BlokusEnv(gym.Env):
                 reward[self.current_player_num] = r
 
         self.done = done
+        self.players[self.current_player_num].has_started = True
 
         if not done:
             self.current_player_num = (self.current_player_num + 1) % self.n_players
