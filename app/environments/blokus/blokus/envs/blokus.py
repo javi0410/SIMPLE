@@ -1,8 +1,8 @@
 import gym
 import copy
 import numpy as np
-from constants import simple_pieces
-from utils import all_moves
+from blokus.envs.constants import simple_pieces
+from blokus.envs.utils import all_moves
 import config
 
 from stable_baselines import logger
