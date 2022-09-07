@@ -229,10 +229,7 @@ class BlokusEnv(gym.Env):
                 self.board = reshaped_boar.reshape(self.num_squares).tolist()
 
                 self.turns_taken += 1
-                r, done = self.check_game_over()
-                reward = [-r, -r]
-                reward[self.current_player_num] = r
-
+                reward, done = self.check_game_over()
         self.done = done
         self.players[self.current_player_num].has_started = True
 
