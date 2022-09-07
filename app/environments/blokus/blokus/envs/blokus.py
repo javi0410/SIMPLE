@@ -56,17 +56,18 @@ class BlokusEnv(gym.Env):
 
     @property
     def observation(self):
-        # TODO
-        if self.current_player.token.number == 1:
-            position_1 = np.array([1 if x.number == 1 else 0 for x in self.board]).reshape(self.grid_shape)
-            position_2 = np.array([1 if x.number == -1 else 0 for x in self.board]).reshape(self.grid_shape)
-            position_3 = np.array([self.can_be_placed(i) for i, x in enumerate(self.board)]).reshape(self.grid_shape)
-        else:
-            position_1 = np.array([1 if x.number == -1 else 0 for x in self.board]).reshape(self.grid_shape)
-            position_2 = np.array([1 if x.number == 1 else 0 for x in self.board]).reshape(self.grid_shape)
-            position_3 = np.array([self.can_be_placed(i) for i, x in enumerate(self.board)]).reshape(self.grid_shape)
+        player = self.current_player_num
+        position_1 = np.array([1 if x.number == player + 1 else 0 for x in self.board]).reshape(self.grid_shape)
+        position_2 = np.array([1 if x.number == ((player + 1) % 4) + 1 else 0 for x in self.board]).reshape(
+            self.grid_shape)
+        position_3 = np.array([1 if x.number == ((player + 2) % 4) + 1 else 0 for x in self.board]).reshape(
+            self.grid_shape)
+        position_4 = np.array([1 if x.number == ((player + 3) % 4) + 1 else 0 for x in self.board]).reshape(
+            self.grid_shape)
+        # TODO Agregar mas información (como por ejemplo hotcells)
+        # position_5 = np.array([self.can_be_placed(i) for i, x in enumerate(self.board)]).reshape(self.grid_shape)
 
-        out = np.stack([position_1, position_2, position_3], axis=-1)
+        out = np.stack([position_1, position_2, position_3, position_4, ], axis=-1)
         return out
 
     @property
