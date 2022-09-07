@@ -86,7 +86,8 @@ class BlokusEnv(gym.Env):
         movement = movements[action_num]
         square, piece_id, piece_super_id, grid = movement
         x, y = int(square / self.rows), square % self.cols
-
+        logger.debug(f"Comprobando que el jugador pose la pieza {piece_super_id}")
+        logger.debug(f"Las piezas del jugador {self.players[self.current_player_num].pieces}")
         if piece_super_id in self.players[self.current_player_num].pieces: #El jugador posee la ficha
             logger.debug(f"Comprobando que el jugador pose la pieza {piece_super_id}")
             for coordinates in grid:  # Chequeo casilla en blanco
