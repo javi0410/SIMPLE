@@ -129,12 +129,9 @@ class BlokusEnv(gym.Env):
             for coordinates in grid:  # Chequeo alguna diagonal del color del jugador (hot cells)
                 # logger.debug("Comprobando las hotcells")
                 coord_x, coord_y = coordinates
-                if action_num == 1772:
-                    logger.debug(f"Comprobando las hotcells")
                 if not self.players[self.current_player_num].has_started:  # Primera pieza que coloca el jugador
                     if action_num == 1772:
-                        logger.debug(
-                            f"El jugador {self.current_player_num}  aun no ha empezado")
+                        logger.debug(f"Primera jugada: simbolo {self.current_player.token.symbol}, {self.rows-1}, 0")
                     if self.current_player.token.symbol == "b" and x + coord_x == 0 and y + coord_y == 0:
                         return 1
                     elif self.current_player.token.symbol == "g" and x + coord_x == self.rows - 1 and y + coord_y == 0:
