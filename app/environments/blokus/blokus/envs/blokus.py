@@ -95,6 +95,8 @@ class BlokusEnv(gym.Env):
                 coord_x, coord_y = coordinates
                 try:
                     #logger.debug(f"Coordenadas : {x+coord_x}, {y+coord_y}")
+                    if (x + coord_x) < 0 or (y + coord_y) < 0 or (x + coord_x) > self.rows or (y + coord_y) > self.cols:
+                        return 0
                     if reshaped_boar[x + coord_x][y + coord_y].number != 0:
                         return 0
                 except:
