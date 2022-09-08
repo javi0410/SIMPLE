@@ -75,7 +75,6 @@ class BlokusEnv(gym.Env):
     @property
     def legal_actions(self):
         legal_actions = []
-        logger.debug(f"Numero de jugadas:{self.action_space.n}")
         for action_num in range(self.action_space.n):
             legal = self.is_legal(action_num)
             legal_actions.append(legal)
@@ -138,7 +137,7 @@ class BlokusEnv(gym.Env):
                 return 0
 
             for coordinates in grid:# Chequeo alguna diagonal del color del jugador (hot cells)
-                logger.debug("Comprobando las hotcells")
+                #logger.debug("Comprobando las hotcells")
                 try:
                     if reshaped_boar[x + coord_x + 1][y + coord_y + 1].number == self.current_player.token.number:
                         return 1
