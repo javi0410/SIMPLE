@@ -95,7 +95,7 @@ class BlokusEnv(gym.Env):
             for coordinates in grid:  # Chequeo casilla en blanco
                 coord_x, coord_y = coordinates
                 if action_num == 2178:
-                    logger.debug(f"Coordenadas : {x+coord_x}, {y+coord_y}")
+                    #logger.debug(f"Coordenadas : {x+coord_x}, {y+coord_y}")
                 try:
                     #logger.debug(f"Coordenadas : {x+coord_x}, {y+coord_y}")
                     if (x + coord_x) < 0 or (y + coord_y) < 0 or (x + coord_x) > self.rows or (y + coord_y) > self.cols:
@@ -130,8 +130,8 @@ class BlokusEnv(gym.Env):
                 for coordinates in grid:
                     coord_x, coord_y = coordinates
                     if action_num == 2178:
-                        logger.debug(f"Primera jugada: simbolo {self.current_player.token.symbol}")
-                        logger.debug(f"Comprobando que {x + coord_x} = {self.rows -1} y que {y + coord_y} == 0")
+                        #logger.debug(f"Primera jugada: simbolo {self.current_player.token.symbol}")
+                        #logger.debug(f"Comprobando que {x + coord_x} = {self.rows -1} y que {y + coord_y} == 0")
                     if self.current_player.token.symbol == "b" and x + coord_x == 0 and y + coord_y == 0:
                         return 1
                     elif self.current_player.token.symbol == "g" and x + coord_x == self.rows - 1 and y + coord_y == 0:
