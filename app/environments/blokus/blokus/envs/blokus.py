@@ -125,11 +125,9 @@ class BlokusEnv(gym.Env):
                         return 0
                 except:
                     continue
-
-            for coordinates in grid:  # Chequeo alguna diagonal del color del jugador (hot cells)
-                # logger.debug("Comprobando las hotcells")
-                coord_x, coord_y = coordinates
-                if not self.players[self.current_player_num].has_started:  # Primera pieza que coloca el jugador
+            if not self.players[self.current_player_num].has_started:  # Primera pieza que coloca el jugador
+                for coordinates in grid:
+                    coord_x, coord_y = coordinates
                     if action_num == 1772:
                         logger.debug(f"Primera jugada: simbolo {self.current_player.token.symbol}")
                         logger.debug(f"Comprobando que {x + coord_x} = {self.rows -1} y que {y + coord_y} == 0")
@@ -141,8 +139,10 @@ class BlokusEnv(gym.Env):
                         return 1
                     elif self.current_player.token.symbol == "y" and x + coord_x == self.rows - 1 and y + coord_y == self.cols - 1:
                         return 1
-                    else:
-                        continue
+                return 0
+
+            for coordinates in grid:# Chequeo alguna diagonal del color del jugador (hot cells)
+                # logger.debug("Comprobando las hotcells")
                 try:
                     if reshaped_boar[x + coord_x + 1][y + coord_y + 1].number == self.current_player.token.number:
                         return 1
