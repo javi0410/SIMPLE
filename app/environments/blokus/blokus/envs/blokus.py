@@ -93,6 +93,8 @@ class BlokusEnv(gym.Env):
             # logger.debug(f"Comprobando que el jugador pose la pieza {piece_super_id}")
             for coordinates in grid:  # Chequeo casilla en blanco
                 coord_x, coord_y = coordinates
+                if action_num == 1671:
+                    logger.debug(f"Coordenadas : {x+coord_x}, {y+coord_y}")
                 try:
                     #logger.debug(f"Coordenadas : {x+coord_x}, {y+coord_y}")
                     if (x + coord_x) < 0 or (y + coord_y) < 0 or (x + coord_x) > self.rows or (y + coord_y) > self.cols:
@@ -130,11 +132,6 @@ class BlokusEnv(gym.Env):
                 if not self.players[self.current_player_num].has_started:  # Primera pieza que coloca el jugador
                     # logger.debug(f"El jugador {self.current_player_num}  aun no ha empezado")
                     if self.current_player.token.symbol == "b" and x + coord_x == 0 and y + coord_y == 0:
-                        logger.debug(f"\n\n\nLa acción {action_num} es correcta.")
-                        logger.debug(f"Se va a proceder a colocar las piezas en las casillas:")
-                        for coor in grid:
-                            cx, cy = coor
-                            logger.debug(f"({x + cx}, {y + cy}")
                         return 1
                     elif self.current_player.token.symbol == "g" and x + coord_x == self.rows - 1 and y + coord_y == 0:
                         return 1
