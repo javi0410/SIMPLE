@@ -87,13 +87,14 @@ class BlokusEnv(gym.Env):
         movement = movements[action_num]
         square, piece_id, piece_super_id, grid = movement
         x, y = int(square / self.rows), square % self.cols
-        # logger.debug(f"Comprobando que el jugador pose la pieza {piece_super_id}")
+        logger.debug(f"\n\n\nComprobando que el jugador pose la pieza {piece_super_id}")
         # logger.debug(f"Las piezas del jugador {self.players[self.current_player_num].super_id_pieces}")
         if piece_super_id in self.players[self.current_player_num].super_id_pieces: #El jugador posee la ficha
             # logger.debug(f"Comprobando que el jugador pose la pieza {piece_super_id}")
             for coordinates in grid:  # Chequeo casilla en blanco
                 coord_x, coord_y = coordinates
                 try:
+                    logger.debug(f"Coordenadas : {x+coord_x}, {y+coord_y}")
                     if reshaped_boar[x + coord_x][y + coord_y].number != 0:
                         return 0
                 except:
@@ -273,9 +274,8 @@ class BlokusEnv(gym.Env):
             logger.debug(f'\nObservation: \n{self.observation}')
 
         if not self.done:
-            legal_actions = [i for i, o in enumerate(self.legal_actions) if o != 0]
-
-            logger.debug(f'\nLegal actions: {[i for i, o in enumerate(self.legal_actions) if o != 0]}')
+            legal_actions = [i for i, o in enumerate(self.legal_actions) if o == 1]
+            logger.debug(f'\nLegal actions: {legal_actions}')
 
     def rules_move(self):
         # TODO
