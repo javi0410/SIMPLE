@@ -94,7 +94,7 @@ class BlokusEnv(gym.Env):
             for coordinates in grid:  # Chequeo casilla en blanco
                 coord_x, coord_y = coordinates
                 try:
-                    logger.debug(f"Coordenadas : {x+coord_x}, {y+coord_y}")
+                    #logger.debug(f"Coordenadas : {x+coord_x}, {y+coord_y}")
                     if reshaped_boar[x + coord_x][y + coord_y].number != 0:
                         return 0
                 except:
