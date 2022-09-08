@@ -87,15 +87,11 @@ class BlokusEnv(gym.Env):
         movement = movements[action_num]
         square, piece_id, piece_super_id, grid = movement
         x, y = int(square / self.rows), square % self.cols
-        #logger.debug(f"\n\n\nComprobando que el jugador pose la pieza {piece_super_id}")
-        # logger.debug(f"Las piezas del jugador {self.players[self.current_player_num].super_id_pieces}")
         if piece_super_id in self.players[self.current_player_num].super_id_pieces: #El jugador posee la ficha
-            # logger.debug(f"Comprobando que el jugador pose la pieza {piece_super_id}")
             for coordinates in grid:  # Chequeo casilla en blanco
                 coord_x, coord_y = coordinates
                 try:
-                    #logger.debug(f"Coordenadas : {x+coord_x}, {y+coord_y}")
-                    if (x + coord_x) < 0 or (y + coord_y) < 0 or (x + coord_x) > self.rows or (y + coord_y) > self.cols:
+                    if (x + coord_x) < 0 or (y + coord_y) < 0 or (x + coord_x) >= self.rows or (y + coord_y) >= self.cols:
                         return 0
                     if reshaped_boar[x + coord_x][y + coord_y].number != 0:
                         return 0
@@ -104,22 +100,32 @@ class BlokusEnv(gym.Env):
             for coordinates in grid:  # Chequeo adyacentes diferentes al color del jugador
                 coord_x, coord_y = coordinates
                 try:
+                    if action_num == 109:
+                        logger.debug(f"{reshaped_boar[x + coord_x + 1][y + coord_y].number}")
                     if reshaped_boar[x + coord_x + 1][y + coord_y].number == self.current_player.token.number:
                         return 0
                 except:
                     continue
                 try:
-                    if reshaped_boar[x + coord_x - 1][y + coord_y].number == self.current_player.token.number:
+                    if action_num == 109:
+                        logger.debug(f"{reshaped_boar[x + coord_x - 1][y + coord_y].number}")
+                    if (x + coord_x - 1) >= 0 and\
+                            reshaped_boar[x + coord_x - 1][y + coord_y].number == self.current_player.token.number:
                         return 0
                 except:
                     continue
                 try:
+                    if action_num == 109:
+                        logger.debug(f"{reshaped_boar[x + coord_x][y + coord_y + 1].number}")
                     if reshaped_boar[x + coord_x][y + coord_y + 1].number == self.current_player.token.number:
                         return 0
                 except:
                     continue
                 try:
-                    if reshaped_boar[x + coord_x + 1][y + coord_y - 1].number == self.current_player.token.number:
+                    if action_num == 109:
+                        logger.debug(f"{reshaped_boar[x + coord_x + 1][y + coord_y - 1].number}")
+                    if (y + coord_y - 1) >= 0 and\
+                            reshaped_boar[x + coord_x + 1][y + coord_y - 1].number == self.current_player.token.number:
                         return 0
                 except:
                     continue
@@ -144,17 +150,20 @@ class BlokusEnv(gym.Env):
                 except:
                     continue
                 try:
-                    if reshaped_boar[x + coord_x - 1][y + coord_y + 1].number == self.current_player.token.number:
+                    if (x + coord_x - 1) >= 0 and\
+                            reshaped_boar[x + coord_x - 1][y + coord_y + 1].number == self.current_player.token.number:
                         return 1
                 except:
                     continue
                 try:
-                    if reshaped_boar[x + coord_x + 1][y + coord_y - 1].number == self.current_player.token.number:
+                    if (y + coord_y - 1) >= 0 and\
+                            reshaped_boar[x + coord_x + 1][y + coord_y - 1].number == self.current_player.token.number:
                         return 1
                 except:
                     continue
                 try:
-                    if reshaped_boar[x + coord_x - 1][y + coord_y - 1].number == self.current_player.token.number:
+                    if (y + coord_y - 1) >= 0 and (x + coord_x - 1) >= 0 and\
+                            reshaped_boar[x + coord_x - 1][y + coord_y - 1].number == self.current_player.token.number:
                         return 1
                 except:
                     continue
