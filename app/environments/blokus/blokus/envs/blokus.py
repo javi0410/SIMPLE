@@ -52,7 +52,7 @@ class BlokusEnv(gym.Env):
         self.n_pieces = 21  # REVISAR
         self.grid_shape = (self.rows, self.cols)
         self.num_squares = self.rows * self.cols
-        self.action_space = gym.spaces.Discrete(self.n_pieces * self.num_squares)
+        self.action_space = gym.spaces.Discrete(len(all_moves(self.num_squares)))
         self.observation_space = gym.spaces.Box(-1, 1, self.grid_shape + (self.n_players,))
         self.verbose = verbose
 
