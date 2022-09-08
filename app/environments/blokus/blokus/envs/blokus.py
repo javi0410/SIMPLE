@@ -87,7 +87,7 @@ class BlokusEnv(gym.Env):
         movement = movements[action_num]
         square, piece_id, piece_super_id, grid = movement
         x, y = int(square / self.rows), square % self.cols
-        logger.debug(f"\n\n\nComprobando que el jugador pose la pieza {piece_super_id}")
+        #logger.debug(f"\n\n\nComprobando que el jugador pose la pieza {piece_super_id}")
         # logger.debug(f"Las piezas del jugador {self.players[self.current_player_num].super_id_pieces}")
         if piece_super_id in self.players[self.current_player_num].super_id_pieces: #El jugador posee la ficha
             # logger.debug(f"Comprobando que el jugador pose la pieza {piece_super_id}")
@@ -128,6 +128,11 @@ class BlokusEnv(gym.Env):
                 if not self.players[self.current_player_num].has_started:  # Primera pieza que coloca el jugador
                     # logger.debug(f"El jugador {self.current_player_num}  aun no ha empezado")
                     if self.current_player.token.symbol == "b" and x + coord_x == 0 and y + coord_y == 0:
+                        logger.debug(f"\n\n\nLa acción {action_num} es correcta.")
+                        logger.debug(f"Se va a proceder a colocar las piezas en las casillas:")
+                        for coor in grid:
+                            cx, cy = coor
+                            logger.debug(f"({x + cx}, {y + cy}")
                         return 1
                     elif self.current_player.token.symbol == "g" and x + coord_x == self.rows - 1 and y + coord_y == 0:
                         return 1
