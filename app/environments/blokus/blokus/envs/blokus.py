@@ -143,7 +143,7 @@ class BlokusEnv(gym.Env):
                 return 0
 
             for coordinates in grid:# Chequeo alguna diagonal del color del jugador (hot cells)
-                # logger.debug("Comprobando las hotcells")
+                logger.debug("Comprobando las hotcells")
                 try:
                     if reshaped_boar[x + coord_x + 1][y + coord_y + 1].number == self.current_player.token.number:
                         return 1
@@ -167,7 +167,7 @@ class BlokusEnv(gym.Env):
         else:
             return 0
 
-        return 1
+        return 0
 
     def square_is_player(self, board, square, player):
         return board[square].number == self.players[player].token.number
