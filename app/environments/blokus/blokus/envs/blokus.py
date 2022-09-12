@@ -99,7 +99,8 @@ class BlokusEnv(gym.Env):
                     return 0
             for coordinates in grid:  # Chequeo adyacentes diferentes al color del jugador
                 coord_x, coord_y = coordinates
-                logger.debug(f"casilla: {coordinates}")
+                if action_num==23:
+                    logger.debug(f"casilla: {coordinates}")
                 try:
                     if action_num == 23:
                         logger.debug(f"der: {reshaped_boar[x + coord_x + 1][y + coord_y].symbol}")
