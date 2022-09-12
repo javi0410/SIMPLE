@@ -108,6 +108,7 @@ class BlokusEnv(gym.Env):
                         continue
                     if action_num == 23:
                         logger.debug(f"debajo: {reshaped_boar[x + coord_x + 1][y + coord_y].symbol}")
+                        logger.debug((x + coord_x + 1),(y + coord_y))
                     if reshaped_boar[x + coord_x + 1][y + coord_y].symbol == self.current_player.token.symbol:
                         return 0
                 except:
@@ -118,6 +119,7 @@ class BlokusEnv(gym.Env):
                         continue
                     if action_num == 23:
                         logger.debug(f"arriba: {reshaped_boar[x + coord_x - 1][y + coord_y].symbol}")
+                        logger.debug((x + coord_x - 1), (y + coord_y))
                     if reshaped_boar[x + coord_x - 1][y + coord_y].symbol == self.current_player.token.symbol:
                         return 0
                 except:
@@ -128,6 +130,7 @@ class BlokusEnv(gym.Env):
                         continue
                     if action_num == 23:
                         logger.debug(f"der: {reshaped_boar[x + coord_x][y + coord_y + 1].symbol}")
+                        logger.debug((x + coord_x), (y + coord_y + 1))
                     if reshaped_boar[x + coord_x][y + coord_y + 1].symbol == self.current_player.token.symbol:
                         return 0
                 except:
@@ -140,6 +143,7 @@ class BlokusEnv(gym.Env):
                         reshaped_boar = np.array(self.board).reshape(self.grid_shape)
                         logger.debug(f"izq: {reshaped_boar[x + coord_x][y + coord_y - 1].symbol}")
                         logger.debug(x + coord_x - 1, y + coord_y)
+                        logger.debug((x + coord_x - 1), (y + coord_y))
                         printable_board = np.array([x.symbol for x in self.board]).reshape(self.grid_shape)
                         for i in range(0, self.rows):
                             logger.debug(' '.join([x for x in printable_board[i]]))
