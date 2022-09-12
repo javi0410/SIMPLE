@@ -101,9 +101,6 @@ class BlokusEnv(gym.Env):
                     return 0
             for coordinates in grid:  # Chequeo adyacentes diferentes al color del jugador
                 coord_x, coord_y = coordinates
-                if action_num == 23:
-                    logger.debug(f"casilla: {x, y}")
-                    logger.debug(f"loseta: {coordinates}")
                 """
                 CASILLA DE DEBAJO
                 """
@@ -119,9 +116,6 @@ class BlokusEnv(gym.Env):
                 """
                 CASILLA DE ARRIBA
                 """
-                if action_num == 23:
-                    logger.debug(f"arriba: {reshaped_boar[x + coord_x - 1][y + coord_y].symbol}")
-                    logger.debug((x + coord_x - 1), (y + coord_y))
                 if (x + coord_x - 1) < 0 or (y + coord_y) < 0 or (x + coord_x - 1) >= self.rows or (
                         y + coord_y) >= self.cols:
                     pass
@@ -132,9 +126,6 @@ class BlokusEnv(gym.Env):
                 """
                 CASILLA DE LA DERECHA
                 """
-                if action_num == 23:
-                    logger.debug(f"der: {reshaped_boar[x + coord_x][y + coord_y + 1].symbol}")
-                    logger.debug((x + coord_x), (y + coord_y + 1))
                 if (x + coord_x) < 0 or (y + coord_y + 1) < 0 or (x + coord_x) >= self.rows or (
                         y + coord_y + 1) >= self.cols:
                     pass
@@ -145,13 +136,6 @@ class BlokusEnv(gym.Env):
                 """
                 CASILLA DE LA IZQUIERDA
                 """
-                if action_num == 23:
-                    logger.debug(f"izq: {reshaped_boar[x + coord_x][y + coord_y - 1].symbol}")
-                    logger.debug(x + coord_x, y + coord_y - 1)
-                    logger.debug((x + coord_x), (y + coord_y - 1))
-                    printable_board = np.array([x.symbol for x in self.board]).reshape(self.grid_shape)
-                    for i in range(0, self.rows):
-                        logger.debug(' '.join([x for x in printable_board[i]]))
                 if (x + coord_x) < 0 or (y + coord_y - 1) < 0 or (x + coord_x) >= self.rows or (
                         y + coord_y - 1) >= self.cols:
                     pass
