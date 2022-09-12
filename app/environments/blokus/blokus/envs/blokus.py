@@ -112,7 +112,7 @@ class BlokusEnv(gym.Env):
                     logger.debug((x + coord_x + 1), (y + coord_y))
                 if (x + coord_x + 1) < 0 or (y + coord_y) < 0 or (x + coord_x + 1) >= self.rows or (
                         y + coord_y) >= self.cols:
-                    continue
+                    pass
                 if reshaped_boar[x + coord_x + 1][y + coord_y].symbol == self.current_player.token.symbol:
                     return 0
                 """
@@ -123,19 +123,19 @@ class BlokusEnv(gym.Env):
                     logger.debug((x + coord_x - 1), (y + coord_y))
                 if (x + coord_x - 1) < 0 or (y + coord_y) < 0 or (x + coord_x - 1) >= self.rows or (
                         y + coord_y) >= self.cols:
-                    continue
+                    pass
                 if reshaped_boar[x + coord_x - 1][y + coord_y].symbol == self.current_player.token.symbol:
                     return 0
 
                 """
                 CASILLA DE LA DERECHA
                 """
-                if (x + coord_x) < 0 or (y + coord_y + 1) < 0 or (x + coord_x) >= self.rows or (
-                        y + coord_y + 1) >= self.cols:
-                    continue
                 if action_num == 23:
                     logger.debug(f"der: {reshaped_boar[x + coord_x][y + coord_y + 1].symbol}")
                     logger.debug((x + coord_x), (y + coord_y + 1))
+                if (x + coord_x) < 0 or (y + coord_y + 1) < 0 or (x + coord_x) >= self.rows or (
+                        y + coord_y + 1) >= self.cols:
+                    pass
                 if reshaped_boar[x + coord_x][y + coord_y + 1].symbol == self.current_player.token.symbol:
                     return 0
 
@@ -151,7 +151,7 @@ class BlokusEnv(gym.Env):
                         logger.debug(' '.join([x for x in printable_board[i]]))
                 if (x + coord_x) < 0 or (y + coord_y - 1) < 0 or (x + coord_x) >= self.rows or (
                         y + coord_y - 1) >= self.cols:
-                    continue
+                    pass
                 if reshaped_boar[x + coord_x][y + coord_y - 1].symbol == self.current_player.token.symbol:
                     return 0
 
