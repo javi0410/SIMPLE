@@ -100,14 +100,14 @@ class BlokusEnv(gym.Env):
             for coordinates in grid:  # Chequeo adyacentes diferentes al color del jugador
                 coord_x, coord_y = coordinates
                 try:
-                    if action_num == 109:
+                    if action_num == 23:
                         logger.debug(f"{reshaped_boar[x + coord_x + 1][y + coord_y].symbol}")
                     if reshaped_boar[x + coord_x + 1][y + coord_y].symbol == self.current_player.token.symbol:
                         return 0
                 except:
                     continue
                 try:
-                    if action_num == 109:
+                    if action_num == 23:
                         logger.debug(f"{reshaped_boar[x + coord_x - 1][y + coord_y].symbol}")
                     if (x + coord_x - 1) >= 0 and\
                             reshaped_boar[x + coord_x - 1][y + coord_y].symbol == self.current_player.token.symbol:
@@ -115,14 +115,14 @@ class BlokusEnv(gym.Env):
                 except:
                     continue
                 try:
-                    if action_num == 109:
+                    if action_num == 23:
                         logger.debug(f"{reshaped_boar[x + coord_x][y + coord_y + 1].symbol}")
                     if reshaped_boar[x + coord_x][y + coord_y + 1].symbol == self.current_player.token.symbol:
                         return 0
                 except:
                     continue
                 try:
-                    if action_num == 109:
+                    if action_num == 23:
                         logger.debug(f"{reshaped_boar[x + coord_x + 1][y + coord_y - 1].symbol}")
                     if (y + coord_y - 1) >= 0 and\
                             reshaped_boar[x + coord_x + 1][y + coord_y - 1].symbol == self.current_player.token.symbol:
@@ -147,24 +147,36 @@ class BlokusEnv(gym.Env):
                 coord_x, coord_y = coordinates
                 try:
                     if reshaped_boar[x + coord_x + 1][y + coord_y + 1].symbol == self.current_player.token.symbol:
+                        if action_num == 23:
+                            logger.debug("abajo der")
+                            logger.debug(reshaped_boar[x + coord_x + 1][y + coord_y + 1].symbol)
                         return 1
                 except:
                     continue
                 try:
                     if (x + coord_x - 1) >= 0 and\
                             reshaped_boar[x + coord_x - 1][y + coord_y + 1].symbol == self.current_player.token.symbol:
+                        if action_num == 23:
+                            logger.debug("abajo der")
+                            logger.debug(reshaped_boar[x + coord_x + 1][y + coord_y + 1].symbol)
                         return 1
                 except:
                     continue
                 try:
                     if (y + coord_y - 1) >= 0 and\
                             reshaped_boar[x + coord_x + 1][y + coord_y - 1].symbol == self.current_player.token.symbol:
+                        if action_num == 23:
+                            logger.debug("abajo der")
+                            logger.debug(reshaped_boar[x + coord_x + 1][y + coord_y + 1].symbol)
                         return 1
                 except:
                     continue
                 try:
                     if (y + coord_y - 1) >= 0 and (x + coord_x - 1) >= 0 and\
                             reshaped_boar[x + coord_x - 1][y + coord_y - 1].symbol == self.current_player.token.symbol:
+                        if action_num == 23:
+                            logger.debug("abajo der")
+                            logger.debug(reshaped_boar[x + coord_x + 1][y + coord_y + 1].symbol)
                         return 1
                 except:
                     continue
