@@ -157,7 +157,7 @@ class BlokusEnv(gym.Env):
                     if (x + coord_x - 1) >= 0 and\
                             reshaped_boar[x + coord_x - 1][y + coord_y + 1].symbol == self.current_player.token.symbol:
                         if action_num == 23:
-                            logger.debug("abajo der")
+                            logger.debug("abajo izq")
                             logger.debug(reshaped_boar[x + coord_x + 1][y + coord_y + 1].symbol)
                         return 1
                 except:
@@ -166,7 +166,7 @@ class BlokusEnv(gym.Env):
                     if (y + coord_y - 1) >= 0 and\
                             reshaped_boar[x + coord_x + 1][y + coord_y - 1].symbol == self.current_player.token.symbol:
                         if action_num == 23:
-                            logger.debug("abajo der")
+                            logger.debug("arriba der")
                             logger.debug(reshaped_boar[x + coord_x + 1][y + coord_y + 1].symbol)
                         return 1
                 except:
@@ -175,7 +175,7 @@ class BlokusEnv(gym.Env):
                     if (y + coord_y - 1) >= 0 and (x + coord_x - 1) >= 0 and\
                             reshaped_boar[x + coord_x - 1][y + coord_y - 1].symbol == self.current_player.token.symbol:
                         if action_num == 23:
-                            logger.debug("abajo der")
+                            logger.debug("arriba izq")
                             logger.debug(reshaped_boar[x + coord_x + 1][y + coord_y + 1].symbol)
                         return 1
                 except:
