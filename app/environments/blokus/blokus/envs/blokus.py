@@ -113,8 +113,9 @@ class BlokusEnv(gym.Env):
                 if (x + coord_x + 1) < 0 or (y + coord_y) < 0 or (x + coord_x + 1) >= self.rows or (
                         y + coord_y) >= self.cols:
                     pass
-                if reshaped_boar[x + coord_x + 1][y + coord_y].symbol == self.current_player.token.symbol:
-                    return 0
+                else:
+                    if reshaped_boar[x + coord_x + 1][y + coord_y].symbol == self.current_player.token.symbol:
+                        return 0
                 """
                 CASILLA DE ARRIBA
                 """
@@ -124,8 +125,9 @@ class BlokusEnv(gym.Env):
                 if (x + coord_x - 1) < 0 or (y + coord_y) < 0 or (x + coord_x - 1) >= self.rows or (
                         y + coord_y) >= self.cols:
                     pass
-                if reshaped_boar[x + coord_x - 1][y + coord_y].symbol == self.current_player.token.symbol:
-                    return 0
+                else:
+                    if reshaped_boar[x + coord_x - 1][y + coord_y].symbol == self.current_player.token.symbol:
+                        return 0
 
                 """
                 CASILLA DE LA DERECHA
@@ -136,8 +138,9 @@ class BlokusEnv(gym.Env):
                 if (x + coord_x) < 0 or (y + coord_y + 1) < 0 or (x + coord_x) >= self.rows or (
                         y + coord_y + 1) >= self.cols:
                     pass
-                if reshaped_boar[x + coord_x][y + coord_y + 1].symbol == self.current_player.token.symbol:
-                    return 0
+                else:
+                    if reshaped_boar[x + coord_x][y + coord_y + 1].symbol == self.current_player.token.symbol:
+                        return 0
 
                 """
                 CASILLA DE LA IZQUIERDA
@@ -152,8 +155,9 @@ class BlokusEnv(gym.Env):
                 if (x + coord_x) < 0 or (y + coord_y - 1) < 0 or (x + coord_x) >= self.rows or (
                         y + coord_y - 1) >= self.cols:
                     pass
-                if reshaped_boar[x + coord_x][y + coord_y - 1].symbol == self.current_player.token.symbol:
-                    return 0
+                else:
+                    if reshaped_boar[x + coord_x][y + coord_y - 1].symbol == self.current_player.token.symbol:
+                        return 0
 
             if not self.players[self.current_player_num].has_started:  # Primera pieza que coloca el jugador
                 for coordinates in grid:
