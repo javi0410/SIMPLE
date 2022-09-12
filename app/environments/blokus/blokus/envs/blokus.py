@@ -111,6 +111,8 @@ class BlokusEnv(gym.Env):
                 try:
                     if action_num == 23:
                         logger.debug(f"izq: {reshaped_boar[x + coord_x - 1][y + coord_y].symbol}")
+                        logger.debug(x + coord_x - 1, y + coord_y)
+                        logger.debug(reshaped_boar)
                     if (x + coord_x - 1) >= 0 and\
                             reshaped_boar[x + coord_x - 1][y + coord_y].symbol == self.current_player.token.symbol:
                         return 0
