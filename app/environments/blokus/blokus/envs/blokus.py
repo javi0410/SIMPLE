@@ -104,8 +104,8 @@ class BlokusEnv(gym.Env):
                     logger.debug(f"loseta: {coordinates}")
                 try:
                     if (x + coord_x + 1) < 0 or (y + coord_y) < 0 or (x + coord_x + 1) >= self.rows or (
-                            y + coord_y) >= self.cols or not self.players[self.current_player_num].has_started:
-                        return 0
+                            y + coord_y) >= self.cols:
+                        continue
                     if action_num == 23:
                         logger.debug(f"debajo: {reshaped_boar[x + coord_x + 1][y + coord_y].symbol}")
                     if reshaped_boar[x + coord_x + 1][y + coord_y].symbol == self.current_player.token.symbol:
@@ -114,8 +114,8 @@ class BlokusEnv(gym.Env):
                     continue
                 try:
                     if (x + coord_x - 1) < 0 or (y + coord_y) < 0 or (x + coord_x - 1) >= self.rows or (
-                            y + coord_y) >= self.cols or not self.players[self.current_player_num].has_started:
-                        return 0
+                            y + coord_y) >= self.cols:
+                        continue
                     if action_num == 23:
                         logger.debug(f"arriba: {reshaped_boar[x + coord_x - 1][y + coord_y].symbol}")
                         logger.debug(x + coord_x - 1, y + coord_y)
@@ -128,8 +128,8 @@ class BlokusEnv(gym.Env):
                     continue
                 try:
                     if (x + coord_x) < 0 or (y + coord_y + 1) < 0 or (x + coord_x) >= self.rows or (
-                            y + coord_y + 1) >= self.cols or not self.players[self.current_player_num].has_started:
-                        return 0
+                            y + coord_y + 1) >= self.cols:
+                        continue
                     if action_num == 23:
                         logger.debug(f"der: {reshaped_boar[x + coord_x][y + coord_y + 1].symbol}")
                     if reshaped_boar[x + coord_x][y + coord_y + 1].symbol == self.current_player.token.symbol:
@@ -138,8 +138,8 @@ class BlokusEnv(gym.Env):
                     continue
                 try:
                     if (x + coord_x) < 0 or (y + coord_y - 1) < 0 or (x + coord_x) >= self.rows or (
-                            y + coord_y -1) >= self.cols or not self.players[self.current_player_num].has_started:
-                        return 0
+                            y + coord_y -1) >= self.cols:
+                        continue
                     if action_num == 23:
                         logger.debug(f"izq: {reshaped_boar[x + coord_x][y + coord_y - 1].symbol}")
                     if reshaped_boar[x + coord_x][y + coord_y - 1].symbol == self.current_player.token.symbol:
