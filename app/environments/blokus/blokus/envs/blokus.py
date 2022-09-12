@@ -14,6 +14,7 @@ def all_moves(num_squares):
             moves.append([i] + j)
     return moves
 
+
 class Piece():
     def __init__(self, id, super_id, matrix):
         self.id = id
@@ -87,11 +88,12 @@ class BlokusEnv(gym.Env):
         movement = movements[action_num]
         square, piece_id, piece_super_id, grid = movement
         x, y = int(square / self.rows), square % self.cols
-        if piece_super_id in self.players[self.current_player_num].super_id_pieces: #El jugador posee la ficha
+        if piece_super_id in self.players[self.current_player_num].super_id_pieces:  # El jugador posee la ficha
             for coordinates in grid:  # Chequeo casilla en blanco
                 coord_x, coord_y = coordinates
                 try:
-                    if (x + coord_x) < 0 or (y + coord_y) < 0 or (x + coord_x) >= self.rows or (y + coord_y) >= self.cols:
+                    if (x + coord_x) < 0 or (y + coord_y) < 0 or (x + coord_x) >= self.rows or (
+                            y + coord_y) >= self.cols:
                         return 0
                     if reshaped_boar[x + coord_x][y + coord_y].number != 0:
                         return 0
@@ -99,58 +101,60 @@ class BlokusEnv(gym.Env):
                     return 0
             for coordinates in grid:  # Chequeo adyacentes diferentes al color del jugador
                 coord_x, coord_y = coordinates
-                if action_num==23:
-                    logger.debug(f"casilla: {x,y}")
+                if action_num == 23:
+                    logger.debug(f"casilla: {x, y}")
                     logger.debug(f"loseta: {coordinates}")
-                try:
-                    if (x + coord_x + 1) < 0 or (y + coord_y) < 0 or (x + coord_x + 1) >= self.rows or (
-                            y + coord_y) >= self.cols:
-                        continue
-                    if action_num == 23:
-                        logger.debug(f"debajo: {reshaped_boar[x + coord_x + 1][y + coord_y].symbol}")
-                        logger.debug((x + coord_x + 1),(y + coord_y))
-                    if reshaped_boar[x + coord_x + 1][y + coord_y].symbol == self.current_player.token.symbol:
-                        return 0
-                except:
+                """
+                CASILLA DE DEBAJO
+                """
+                if action_num == 23:
+                    logger.debug(f"debajo: {reshaped_boar[x + coord_x + 1][y + coord_y].symbol}")
+                    logger.debug((x + coord_x + 1), (y + coord_y))
+                if (x + coord_x + 1) < 0 or (y + coord_y) < 0 or (x + coord_x + 1) >= self.rows or (
+                        y + coord_y) >= self.cols:
                     continue
-                try:
-                    if (x + coord_x - 1) < 0 or (y + coord_y) < 0 or (x + coord_x - 1) >= self.rows or (
-                            y + coord_y) >= self.cols:
-                        continue
-                    if action_num == 23:
-                        logger.debug(f"arriba: {reshaped_boar[x + coord_x - 1][y + coord_y].symbol}")
-                        logger.debug((x + coord_x - 1), (y + coord_y))
-                    if reshaped_boar[x + coord_x - 1][y + coord_y].symbol == self.current_player.token.symbol:
-                        return 0
-                except:
+                if reshaped_boar[x + coord_x + 1][y + coord_y].symbol == self.current_player.token.symbol:
+                    return 0
+                """
+                CASILLA DE ARRIBA
+                """
+                if action_num == 23:
+                    logger.debug(f"arriba: {reshaped_boar[x + coord_x - 1][y + coord_y].symbol}")
+                    logger.debug((x + coord_x - 1), (y + coord_y))
+                if (x + coord_x - 1) < 0 or (y + coord_y) < 0 or (x + coord_x - 1) >= self.rows or (
+                        y + coord_y) >= self.cols:
                     continue
-                try:
-                    if (x + coord_x) < 0 or (y + coord_y + 1) < 0 or (x + coord_x) >= self.rows or (
-                            y + coord_y + 1) >= self.cols:
-                        continue
-                    if action_num == 23:
-                        logger.debug(f"der: {reshaped_boar[x + coord_x][y + coord_y + 1].symbol}")
-                        logger.debug((x + coord_x), (y + coord_y + 1))
-                    if reshaped_boar[x + coord_x][y + coord_y + 1].symbol == self.current_player.token.symbol:
-                        return 0
-                except:
+                if reshaped_boar[x + coord_x - 1][y + coord_y].symbol == self.current_player.token.symbol:
+                    return 0
+
+                """
+                CASILLA DE LA DERECHA
+                """
+                if (x + coord_x) < 0 or (y + coord_y + 1) < 0 or (x + coord_x) >= self.rows or (
+                        y + coord_y + 1) >= self.cols:
                     continue
-                try:
-                    if (x + coord_x) < 0 or (y + coord_y - 1) < 0 or (x + coord_x) >= self.rows or (
-                            y + coord_y -1) >= self.cols:
-                        continue
-                    if action_num == 23:
-                        reshaped_boar = np.array(self.board).reshape(self.grid_shape)
-                        logger.debug(f"izq: {reshaped_boar[x + coord_x][y + coord_y - 1].symbol}")
-                        logger.debug(x + coord_x - 1, y + coord_y)
-                        logger.debug((x + coord_x - 1), (y + coord_y))
-                        printable_board = np.array([x.symbol for x in self.board]).reshape(self.grid_shape)
-                        for i in range(0, self.rows):
-                            logger.debug(' '.join([x for x in printable_board[i]]))
-                    if reshaped_boar[x + coord_x][y + coord_y - 1].symbol == self.current_player.token.symbol:
-                        return 0
-                except:
+                if action_num == 23:
+                    logger.debug(f"der: {reshaped_boar[x + coord_x][y + coord_y + 1].symbol}")
+                    logger.debug((x + coord_x), (y + coord_y + 1))
+                if reshaped_boar[x + coord_x][y + coord_y + 1].symbol == self.current_player.token.symbol:
+                    return 0
+
+                """
+                CASILLA DE LA IZQUIERDA
+                """
+                if action_num == 23:
+                    logger.debug(f"izq: {reshaped_boar[x + coord_x][y + coord_y - 1].symbol}")
+                    logger.debug(x + coord_x, y + coord_y - 1)
+                    logger.debug((x + coord_x), (y + coord_y - 1))
+                    printable_board = np.array([x.symbol for x in self.board]).reshape(self.grid_shape)
+                    for i in range(0, self.rows):
+                        logger.debug(' '.join([x for x in printable_board[i]]))
+                if (x + coord_x) < 0 or (y + coord_y - 1) < 0 or (x + coord_x) >= self.rows or (
+                        y + coord_y - 1) >= self.cols:
                     continue
+                if reshaped_boar[x + coord_x][y + coord_y - 1].symbol == self.current_player.token.symbol:
+                    return 0
+
             if not self.players[self.current_player_num].has_started:  # Primera pieza que coloca el jugador
                 for coordinates in grid:
                     coord_x, coord_y = coordinates
@@ -164,8 +168,8 @@ class BlokusEnv(gym.Env):
                         return 1
                 return 0
 
-            for coordinates in grid:# Chequeo alguna diagonal del color del jugador (hot cells)
-                #logger.debug("Comprobando las hotcells")
+            for coordinates in grid:  # Chequeo alguna diagonal del color del jugador (hot cells)
+                # logger.debug("Comprobando las hotcells")
                 coord_x, coord_y = coordinates
                 try:
                     if reshaped_boar[x + coord_x + 1][y + coord_y + 1].symbol == self.current_player.token.symbol:
@@ -176,7 +180,7 @@ class BlokusEnv(gym.Env):
                 except:
                     continue
                 try:
-                    if (x + coord_x - 1) >= 0 and\
+                    if (x + coord_x - 1) >= 0 and \
                             reshaped_boar[x + coord_x - 1][y + coord_y + 1].symbol == self.current_player.token.symbol:
                         if action_num == 23:
                             logger.debug("abajo izq")
@@ -185,7 +189,7 @@ class BlokusEnv(gym.Env):
                 except:
                     continue
                 try:
-                    if (y + coord_y - 1) >= 0 and\
+                    if (y + coord_y - 1) >= 0 and \
                             reshaped_boar[x + coord_x + 1][y + coord_y - 1].symbol == self.current_player.token.symbol:
                         if action_num == 23:
                             logger.debug("arriba der")
@@ -194,7 +198,7 @@ class BlokusEnv(gym.Env):
                 except:
                     continue
                 try:
-                    if (y + coord_y - 1) >= 0 and (x + coord_x - 1) >= 0 and\
+                    if (y + coord_y - 1) >= 0 and (x + coord_x - 1) >= 0 and \
                             reshaped_boar[x + coord_x - 1][y + coord_y - 1].symbol == self.current_player.token.symbol:
                         if action_num == 23:
                             logger.debug("arriba izq")
