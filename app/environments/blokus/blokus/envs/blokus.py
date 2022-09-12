@@ -99,16 +99,17 @@ class BlokusEnv(gym.Env):
                     return 0
             for coordinates in grid:  # Chequeo adyacentes diferentes al color del jugador
                 coord_x, coord_y = coordinates
+                logger.debug(f"casilla: {coordinates}")
                 try:
                     if action_num == 23:
-                        logger.debug(f"{reshaped_boar[x + coord_x + 1][y + coord_y].symbol}")
+                        logger.debug(f"der: {reshaped_boar[x + coord_x + 1][y + coord_y].symbol}")
                     if reshaped_boar[x + coord_x + 1][y + coord_y].symbol == self.current_player.token.symbol:
                         return 0
                 except:
                     continue
                 try:
                     if action_num == 23:
-                        logger.debug(f"{reshaped_boar[x + coord_x - 1][y + coord_y].symbol}")
+                        logger.debug(f"izq: {reshaped_boar[x + coord_x - 1][y + coord_y].symbol}")
                     if (x + coord_x - 1) >= 0 and\
                             reshaped_boar[x + coord_x - 1][y + coord_y].symbol == self.current_player.token.symbol:
                         return 0
@@ -116,14 +117,14 @@ class BlokusEnv(gym.Env):
                     continue
                 try:
                     if action_num == 23:
-                        logger.debug(f"{reshaped_boar[x + coord_x][y + coord_y + 1].symbol}")
+                        logger.debug(f"abajo: {reshaped_boar[x + coord_x][y + coord_y + 1].symbol}")
                     if reshaped_boar[x + coord_x][y + coord_y + 1].symbol == self.current_player.token.symbol:
                         return 0
                 except:
                     continue
                 try:
                     if action_num == 23:
-                        logger.debug(f"{reshaped_boar[x + coord_x + 1][y + coord_y - 1].symbol}")
+                        logger.debug(f"arriba: {reshaped_boar[x + coord_x + 1][y + coord_y - 1].symbol}")
                     if (y + coord_y - 1) >= 0 and\
                             reshaped_boar[x + coord_x + 1][y + coord_y - 1].symbol == self.current_player.token.symbol:
                         return 0
