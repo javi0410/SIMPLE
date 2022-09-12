@@ -100,38 +100,50 @@ class BlokusEnv(gym.Env):
             for coordinates in grid:  # Chequeo adyacentes diferentes al color del jugador
                 coord_x, coord_y = coordinates
                 if action_num==23:
-                    logger.debug(f"casilla: {coordinates}")
+                    logger.debug(f"casilla: {x,y}")
+                    logger.debug(f"loseta: {coordinates}")
                 try:
+                    if (x + coord_x + 1) < 0 or (y + coord_y) < 0 or (x + coord_x + 1) >= self.rows or (
+                            y + coord_y) >= self.cols:
+                        return 0
                     if action_num == 23:
-                        logger.debug(f"der: {reshaped_boar[x + coord_x + 1][y + coord_y].symbol}")
+                        logger.debug(f"debajo: {reshaped_boar[x + coord_x + 1][y + coord_y].symbol}")
                     if reshaped_boar[x + coord_x + 1][y + coord_y].symbol == self.current_player.token.symbol:
                         return 0
                 except:
                     continue
                 try:
+                    if (x + coord_x - 1) < 0 or (y + coord_y) < 0 or (x + coord_x - 1) >= self.rows or (
+                            y + coord_y) >= self.cols:
+                        return 0
                     if action_num == 23:
-                        logger.debug(f"izq: {reshaped_boar[x + coord_x - 1][y + coord_y].symbol}")
+                        logger.debug(f"arriba: {reshaped_boar[x + coord_x - 1][y + coord_y].symbol}")
                         logger.debug(x + coord_x - 1, y + coord_y)
                         printable_board = np.array([x.symbol for x in self.board]).reshape(self.grid_shape)
                         for i in range(0, self.rows):
                             logger.debug(' '.join([x for x in printable_board[i]]))
-                    if (x + coord_x - 1) >= 0 and\
-                            reshaped_boar[x + coord_x - 1][y + coord_y].symbol == self.current_player.token.symbol:
+                    if reshaped_boar[x + coord_x - 1][y + coord_y].symbol == self.current_player.token.symbol:
                         return 0
                 except:
                     continue
                 try:
+                    if (x + coord_x) < 0 or (y + coord_y + 1) < 0 or (x + coord_x) >= self.rows or (
+                            y + coord_y + 1) >= self.cols:
+                        return 0
                     if action_num == 23:
-                        logger.debug(f"abajo: {reshaped_boar[x + coord_x][y + coord_y + 1].symbol}")
+                        logger.debug(f"der: {reshaped_boar[x + coord_x][y + coord_y + 1].symbol}")
                     if reshaped_boar[x + coord_x][y + coord_y + 1].symbol == self.current_player.token.symbol:
                         return 0
                 except:
                     continue
                 try:
+                    if (x + coord_x) < 0 or (y + coord_y - 1) < 0 or (x + coord_x) >= self.rows or (
+                            y + coord_y -1) >= self.cols:
+                        return 0
                     if action_num == 23:
-                        logger.debug(f"arriba: {reshaped_boar[x + coord_x + 1][y + coord_y - 1].symbol}")
+                        logger.debug(f"izq: {reshaped_boar[x + coord_x][y + coord_y - 1].symbol}")
                     if (y + coord_y - 1) >= 0 and\
-                            reshaped_boar[x + coord_x + 1][y + coord_y - 1].symbol == self.current_player.token.symbol:
+                            reshaped_boar[x + coord_x][y + coord_y - 1].symbol == self.current_player.token.symbol:
                         return 0
                 except:
                     continue
