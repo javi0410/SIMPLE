@@ -144,6 +144,7 @@ class BlokusEnv(gym.Env):
 
             for coordinates in grid:# Chequeo alguna diagonal del color del jugador (hot cells)
                 #logger.debug("Comprobando las hotcells")
+                coord_x, coord_y = coordinates
                 try:
                     if reshaped_boar[x + coord_x + 1][y + coord_y + 1].symbol == self.current_player.token.symbol:
                         return 1
