@@ -104,9 +104,6 @@ class BlokusEnv(gym.Env):
                 """
                 CASILLA DE DEBAJO
                 """
-                if action_num == 23:
-                    logger.debug(f"debajo: {reshaped_boar[x + coord_x + 1][y + coord_y].symbol}")
-                    logger.debug((x + coord_x + 1), (y + coord_y))
                 if (x + coord_x + 1) < 0 or (y + coord_y) < 0 or (x + coord_x + 1) >= self.rows or (
                         y + coord_y) >= self.cols:
                     pass
