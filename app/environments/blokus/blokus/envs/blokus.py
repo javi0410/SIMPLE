@@ -87,14 +87,20 @@ class BlokusEnv(gym.Env):
         movement = movements[action_num]
         square, piece_id, piece_super_id, grid = movement
         x, y = int(square / self.rows), square % self.cols
+        if debug:
+            logger.debug(f"Piezas restantes: {self.players[self.current_player_num].super_id_pieces}")
         if piece_super_id in self.players[self.current_player_num].super_id_pieces:  # El jugador posee la ficha
             for coordinates in grid:  # Chequeo casilla en blanco
                 coord_x, coord_y = coordinates
                 try:
                     if (x + coord_x) < 0 or (y + coord_y) < 0 or (x + coord_x) >= self.rows or (
                             y + coord_y) >= self.cols:
+                        if debug:
+                            logger.debug(f"La pieza se sale del tablero en {x + coord_x}, {y + coord_y}")
                         return 0
                     if reshaped_boar[x + coord_x][y + coord_y].number != 0:
+                        if debug:
+                            logger.debug(f"La casilla ({x + coord_x}, {y + coord_y}) está ocupada.")
                         return 0
                 except:
                     return 0
@@ -108,6 +114,8 @@ class BlokusEnv(gym.Env):
                     pass
                 else:
                     if reshaped_boar[x + coord_x + 1][y + coord_y].symbol == self.current_player.token.symbol:
+                        if debug:
+                            logger.debug(f"La casilla ({x + coord_x}, {y + coord_y}) está bloqueada por la casilla de abajo.")
                         return 0
                 """
                 CASILLA DE ARRIBA
@@ -117,6 +125,8 @@ class BlokusEnv(gym.Env):
                     pass
                 else:
                     if reshaped_boar[x + coord_x - 1][y + coord_y].symbol == self.current_player.token.symbol:
+                        if debug:
+                            logger.debug(f"La casilla ({x + coord_x}, {y + coord_y}) está bloqueada por la casilla de arriba.")
                         return 0
 
                 """
@@ -127,6 +137,8 @@ class BlokusEnv(gym.Env):
                     pass
                 else:
                     if reshaped_boar[x + coord_x][y + coord_y + 1].symbol == self.current_player.token.symbol:
+                        if debug:
+                            logger.debug(f"La casilla ({x + coord_x}, {y + coord_y}) está bloqueada por la casilla de la derecha.")
                         return 0
 
                 """
@@ -137,6 +149,8 @@ class BlokusEnv(gym.Env):
                     pass
                 else:
                     if reshaped_boar[x + coord_x][y + coord_y - 1].symbol == self.current_player.token.symbol:
+                        if debug:
+                            logger.debug(f"La casilla ({x + coord_x}, {y + coord_y}) está bloqueada por la casilla de la izqda.")
                         return 0
 
             if not self.players[self.current_player_num].has_started:  # Primera pieza que coloca el jugador
@@ -179,8 +193,13 @@ class BlokusEnv(gym.Env):
                 except:
                     continue
         else:
+            if debug:
+                logger.debug(f"El jugador no tiene la pieza {piece_super_id}")
             return 0
 
+        if debug:
+            logger.debug(
+                f"La jugada {action_num} no tiene ninguna celda en una hotcell")
         return 0
 
     def square_is_player(self, board, square, player):
