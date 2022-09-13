@@ -337,12 +337,10 @@ class BlokusEnv(gym.Env):
             logger.debug(f'\nObservation: \n{self.observation}')
 
         if not self.done:
-            logger.debug("Ejecutando Legal_actions en render")
             legal_actions = [i for i, o in enumerate(self.legal_actions) if o == 1]
             logger.debug(f'\nLegal actions: {legal_actions}')
 
     def rules_move(self):
-        logger.debug("Ejecutando Legal_actions en rules_move")
         actions = self.legal_actions
         masked_action_probs = [1/sum(actions) * a for a in actions]
         return masked_action_probs
