@@ -337,7 +337,9 @@ class BlokusEnv(gym.Env):
             logger.debug(f'\nObservation: \n{self.observation}')
 
         if not self.done:
-            legal_actions = [i for i, o in enumerate(self.legal_actions) if o == 1]
+            self.legal_actions_cached = copy.deepcopy(self.legal_actions)
+            legal_actions = [i for i, o in enumerate(self.legal_actions_cached) if o == 1]
+
             logger.debug(f'\nLegal actions: {legal_actions}')
 
     def rules_move(self):
