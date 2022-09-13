@@ -161,13 +161,13 @@ class BlokusEnv(gym.Env):
             if not self.players[self.current_player_num].has_started:  # Primera pieza que coloca el jugador
                 for coordinates in grid:
                     coord_x, coord_y = coordinates
-                    if self.current_player.token.symbol == "b" and x + coord_x == 0 and y + coord_y == 0:
+                    if self.current_player.token.symbol == "b" and x + coord_x == 0 and y + coord_y == 0: # PLAYER 1
                         return 1
-                    elif self.current_player.token.symbol == "r" and x + coord_x == self.rows - 1 and y + coord_y == 0:
+                    elif self.current_player.token.symbol == "g" and x + coord_x == 0 and y + coord_y == self.cols - 1: # PLAYER 2
                         return 1
-                    elif self.current_player.token.symbol == "y" and x + coord_x == 0 and y + coord_y == self.cols - 1:
+                    elif self.current_player.token.symbol == "r" and x + coord_x == self.rows - 1 and y + coord_y == self.cols - 1: # PLAYER 3
                         return 1
-                    elif self.current_player.token.symbol == "g" and x + coord_x == self.rows - 1 and y + coord_y == self.cols - 1:
+                    elif self.current_player.token.symbol == "y" and x + coord_x == self.rows - 1 and y + coord_y == 0: # PLAYER 4
                         return 1
                 return 0
 
