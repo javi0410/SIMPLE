@@ -250,6 +250,8 @@ class BlokusEnv(gym.Env):
                     new_reward = reward[i] - max(points)
                     reward[i] = new_reward
 
+            logger.debug(f"Game over. Reward : {reward}")
+
             return reward, True
 
         # if self.turns_taken == self.num_squares:
@@ -291,7 +293,7 @@ class BlokusEnv(gym.Env):
                 self.current_player.super_id_pieces = [i for i in self.current_player.super_id_pieces if
                                                        i != piece_super_id]
                 self.board = reshaped_boar.reshape(self.num_squares).tolist()
-
+                self.current_player.partial_points += grid.shape[0]
                 self.turns_taken += 1
                 reward, done = self.check_game_over()
         self.done = done
