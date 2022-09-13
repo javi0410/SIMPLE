@@ -343,33 +343,6 @@ class BlokusEnv(gym.Env):
             logger.debug(f'\nLegal actions: {legal_actions}')
 
     def rules_move(self):
-        # TODO
-        WRONG_MOVE_PROB = 0.01
-        player = self.current_player_num
-
-        for action in range(self.action_space.n):
-            if self.is_legal(action):
-                new_board = self.board.copy()
-                square = self.get_square(new_board, action)
-                new_board[square] = self.players[player].token
-                _, done = self.check_game_over(new_board, player)
-                if done:
-                    action_probs = [WRONG_MOVE_PROB] * self.action_space.n
-                    action_probs[action] = 1 - WRONG_MOVE_PROB * (self.action_space.n - 1)
-                    return action_probs
-
-        player = (self.current_player_num + 1) % 2
-
-        for action in range(self.action_space.n):
-            if self.is_legal(action):
-                new_board = self.board.copy()
-                square = self.get_square(new_board, action)
-                new_board[square] = self.players[player].token
-                _, done = self.check_game_over(new_board, player)
-                if done:
-                    action_probs = [0] * self.action_space.n
-                    action_probs[action] = 1 - WRONG_MOVE_PROB * (self.action_space.n - 1)
-                    return action_probs
-
-        action, masked_action_probs = self.sample_masked_action([1] * self.action_space.n)
+        actions = self.legal_actions
+        masked_action_probs = [1/sum(actions) * a for a in actions]
         return masked_action_probs
