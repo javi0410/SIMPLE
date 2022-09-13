@@ -74,7 +74,7 @@ class BlokusEnv(gym.Env):
         return out
 
     @property
-    def legal_actions(self):
+    def legal_actions_uncached(self):
         legal_actions = []
         for action_num in range(self.action_space.n):
             legal = self.is_legal(action_num)
@@ -339,12 +339,12 @@ class BlokusEnv(gym.Env):
             logger.debug(f'\nObservation: \n{self.observation}')
 
         if not self.done:
-            self.legal_actions_cached = copy.deepcopy(self.legal_actions)
-            legal_actions = [i for i, o in enumerate(self.legal_actions_cached) if o == 1]
+            self.legal_actions = copy.deepcopy(self.legal_actions_uncached)
+            legal_actions = [i for i, o in enumerate(self.legal_actions) if o == 1]
 
             logger.debug(f'\nLegal actions: {legal_actions}')
 
     def rules_move(self):
-        actions = self.legal_actions_cached
+        actions = self.legal_actions
         masked_action_probs = [1/sum(actions) * a for a in actions]
         return masked_action_probs
