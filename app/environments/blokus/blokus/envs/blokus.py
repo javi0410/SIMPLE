@@ -12,6 +12,7 @@ def all_moves(num_squares):
     for i in range(num_squares):
         for j in simple_pieces:
             moves.append([i] + j)
+    moves.append([2200])
     return moves
 
 
@@ -79,9 +80,13 @@ class BlokusEnv(gym.Env):
             legal = self.is_legal(action_num)
             legal_actions.append(legal)
 
+        if all(item == 0 for item in legal_actions):
+            legal_actions[2200] = 1
         return np.array(legal_actions)
 
     def is_legal(self, action_num, debug=False):
+        if action_num == 2200:
+            return 0
         reshaped_boar = np.array(self.board).reshape(self.grid_shape)
         movements = all_moves(self.num_squares)
         movement = movements[action_num]
@@ -263,6 +268,10 @@ class BlokusEnv(gym.Env):
     def step(self, action):
         reward = [0] * self.n_players
         done = False
+
+        if action == 2200:
+            self.players[self.current_player_num].eliminated = True
+            reward, done = self.check_game_over()
 
         if not self.players[self.current_player_num].eliminated:
 
