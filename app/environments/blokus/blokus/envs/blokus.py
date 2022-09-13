@@ -177,7 +177,7 @@ class BlokusEnv(gym.Env):
                 except:
                     if debug:
                         logger.debug(f"La diagonal abajo a la derecha no está en el tablero: ({x + coord_x + 1}, {y + coord_y + 1}")
-                    continue
+                    pass
                 try:
                     if (x + coord_x - 1) >= 0 and \
                             reshaped_boar[x + coord_x - 1][y + coord_y + 1].symbol == self.current_player.token.symbol:
@@ -187,7 +187,7 @@ class BlokusEnv(gym.Env):
                 except:
                     if debug:
                         logger.debug(f"La diagonal arriba a la derecha no está en el tablero: ({x + coord_x - 1}, {y + coord_y + 1}")
-                    continue
+                    pass
                 try:
                     if (y + coord_y - 1) >= 0 and \
                             reshaped_boar[x + coord_x + 1][y + coord_y - 1].symbol == self.current_player.token.symbol:
@@ -197,7 +197,7 @@ class BlokusEnv(gym.Env):
                 except:
                     if debug:
                         logger.debug(f"La diagonal abajo a la izda no está en el tablero: ({x + coord_x + 1}, {y + coord_y - 1}")
-                    continue
+                    pass
                 try:
                     if (y + coord_y - 1) >= 0 and (x + coord_x - 1) >= 0 and \
                             reshaped_boar[x + coord_x - 1][y + coord_y - 1].symbol == self.current_player.token.symbol:
@@ -207,7 +207,7 @@ class BlokusEnv(gym.Env):
                 except:
                     if debug:
                         logger.debug(f"La diagonal arriba a la izda no está en el tablero: ({x + coord_x - 1}, {y + coord_y - 1}")
-                    continue
+                    pass
         else:
             if debug:
                 logger.debug(f"El jugador no tiene la pieza {piece_super_id}")
