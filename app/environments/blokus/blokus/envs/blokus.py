@@ -343,6 +343,6 @@ class BlokusEnv(gym.Env):
             logger.debug(f'\nLegal actions: {legal_actions}')
 
     def rules_move(self):
-        actions = self.legal_actions
+        actions = self.legal_actions_cached
         masked_action_probs = [1/sum(actions) * a for a in actions]
         return masked_action_probs
