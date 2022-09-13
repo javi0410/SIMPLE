@@ -29,11 +29,10 @@ class Token():
 
 
 class Player():
-    def __init__(self, id, token, pieces_super_id_list, has_started=False):
+    def __init__(self, id, token, super_id_pieces, has_started=False):
         self.id = id
         self.token = token
-        self.pieces = pieces_super_id_list
-        self.super_id_pieces = [p.super_id for p in self.pieces]
+        self.super_id_pieces = super_id_pieces
         self.partial_points = 0
         self.eliminated = False
         self.has_started = has_started
@@ -158,36 +157,24 @@ class BlokusEnv(gym.Env):
                 coord_x, coord_y = coordinates
                 try:
                     if reshaped_boar[x + coord_x + 1][y + coord_y + 1].symbol == self.current_player.token.symbol:
-                        if action_num == 23:
-                            logger.debug("abajo der")
-                            logger.debug(reshaped_boar[x + coord_x + 1][y + coord_y + 1].symbol)
                         return 1
                 except:
                     continue
                 try:
                     if (x + coord_x - 1) >= 0 and \
                             reshaped_boar[x + coord_x - 1][y + coord_y + 1].symbol == self.current_player.token.symbol:
-                        if action_num == 23:
-                            logger.debug("abajo izq")
-                            logger.debug(reshaped_boar[x + coord_x + 1][y + coord_y + 1].symbol)
                         return 1
                 except:
                     continue
                 try:
                     if (y + coord_y - 1) >= 0 and \
                             reshaped_boar[x + coord_x + 1][y + coord_y - 1].symbol == self.current_player.token.symbol:
-                        if action_num == 23:
-                            logger.debug("arriba der")
-                            logger.debug(reshaped_boar[x + coord_x + 1][y + coord_y + 1].symbol)
                         return 1
                 except:
                     continue
                 try:
                     if (y + coord_y - 1) >= 0 and (x + coord_x - 1) >= 0 and \
                             reshaped_boar[x + coord_x - 1][y + coord_y - 1].symbol == self.current_player.token.symbol:
-                        if action_num == 23:
-                            logger.debug("arriba izq")
-                            logger.debug(reshaped_boar[x + coord_x + 1][y + coord_y + 1].symbol)
                         return 1
                 except:
                     continue
@@ -261,6 +248,8 @@ class BlokusEnv(gym.Env):
                 for coordinates in grid:
                     coord_x, coord_y = coordinates
                     reshaped_boar[x + coord_x][y + coord_y] = self.current_player.token
+                self.current_player.super_id_pieces = [i for i in self.current_player.super_id_pieces if
+                                                       i != piece_super_id]
                 self.board = reshaped_boar.reshape(self.num_squares).tolist()
 
                 self.turns_taken += 1
@@ -281,11 +270,11 @@ class BlokusEnv(gym.Env):
         # self.board[self.num_squares - self.cols - 1] = [Token('r', 7)]
         # self.board[-1] = [Token('y', 8)]
 
-        pieces = [Piece(*i) for i in simple_pieces]
-        self.players = [Player(0, Token('b', 1), copy.deepcopy(pieces)),
-                        Player(1, Token('g', 2), copy.deepcopy(pieces)),
-                        Player(2, Token('r', 3), copy.deepcopy(pieces)),
-                        Player(3, Token('y', 4), copy.deepcopy(pieces))]
+        super_id_pieces = [i for i in range(10)]
+        self.players = [Player(0, Token('b', 1), copy.deepcopy(super_id_pieces)),
+                        Player(1, Token('g', 2), copy.deepcopy(super_id_pieces)),
+                        Player(2, Token('r', 3), copy.deepcopy(super_id_pieces)),
+                        Player(3, Token('y', 4), copy.deepcopy(super_id_pieces))]
         self.current_player_num = 0
         self.turns_taken = 0
         self.done = False
