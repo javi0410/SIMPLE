@@ -239,11 +239,9 @@ class BlokusEnv(gym.Env):
         for i_player in range(self.n_players):
             if i_player != self.current_player_num:
                 if not self.players[i_player].eliminated:
-                    if self.legal_actions.size == 0:
-                        self.players[self.current_player_num].eliminated = True
                     return reward, False
 
-        if self.legal_actions.size == 0:
+        if self.current_player.eliminated:
             points = [p.partial_points for p in self.players]
             winner = np.argmax(points)
             reward = copy.deepcopy(points)
@@ -339,10 +337,12 @@ class BlokusEnv(gym.Env):
             logger.debug(f'\nObservation: \n{self.observation}')
 
         if not self.done:
+            logger.debug("Ejecutando Legal_actions en render")
             legal_actions = [i for i, o in enumerate(self.legal_actions) if o == 1]
             logger.debug(f'\nLegal actions: {legal_actions}')
 
     def rules_move(self):
+        logger.debug("Ejecutando Legal_actions en rules_move")
         actions = self.legal_actions
         masked_action_probs = [1/sum(actions) * a for a in actions]
         return masked_action_probs
