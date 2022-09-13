@@ -163,11 +163,11 @@ class BlokusEnv(gym.Env):
                     coord_x, coord_y = coordinates
                     if self.current_player.token.symbol == "b" and x + coord_x == 0 and y + coord_y == 0:
                         return 1
-                    elif self.current_player.token.symbol == "g" and x + coord_x == self.rows - 1 and y + coord_y == 0:
+                    elif self.current_player.token.symbol == "r" and x + coord_x == self.rows - 1 and y + coord_y == 0:
                         return 1
-                    elif self.current_player.token.symbol == "r" and x + coord_x == 0 and y + coord_y == self.cols - 1:
+                    elif self.current_player.token.symbol == "y" and x + coord_x == 0 and y + coord_y == self.cols - 1:
                         return 1
-                    elif self.current_player.token.symbol == "y" and x + coord_x == self.rows - 1 and y + coord_y == self.cols - 1:
+                    elif self.current_player.token.symbol == "g" and x + coord_x == self.rows - 1 and y + coord_y == self.cols - 1:
                         return 1
                 return 0
 
@@ -250,7 +250,7 @@ class BlokusEnv(gym.Env):
                     new_reward = reward[i] - max(points)
                     reward[i] = new_reward
 
-            logger.debug(f"Game over. Reward : {reward}")
+            logger.debug(f"Game over. Points : {points}")
 
             return reward, True
 
