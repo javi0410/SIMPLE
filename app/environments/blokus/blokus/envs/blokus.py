@@ -81,7 +81,7 @@ class BlokusEnv(gym.Env):
 
         return np.array(legal_actions)
 
-    def is_legal(self, action_num):
+    def is_legal(self, action_num, debug=False):
         reshaped_boar = np.array(self.board).reshape(self.grid_shape)
         movements = all_moves(self.num_squares)
         movement = movements[action_num]
@@ -229,12 +229,10 @@ class BlokusEnv(gym.Env):
         reward = [0] * self.n_players
         done = False
 
-        # check move legality
-        board = self.board
-
         if not self.players[self.current_player_num].eliminated:
 
             if not self.is_legal(action):
+                self.is_legal(action, debug=True)
                 done = True
                 reward = [1] * self.n_players
                 reward[self.current_player_num] = -1
