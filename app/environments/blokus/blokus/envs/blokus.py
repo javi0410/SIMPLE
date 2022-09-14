@@ -2,6 +2,7 @@ import gym
 import copy
 import numpy as np
 from blokus.envs.constants import simple_pieces
+from termcolor import colored
 import config
 
 from stable_baselines import logger
@@ -309,12 +310,18 @@ class BlokusEnv(gym.Env):
 
         if self.current_player.eliminated:
             points = [p.partial_points for p in self.players]
-            winner = np.argmax(points)
-            reward = copy.deepcopy(points)
-            for i in range(len(reward)):
-                if i != winner:
-                    new_reward = reward[i] - max(points)
-                    reward[i] = new_reward
+            winners = []
+            losers = []
+            for w in range(len(points)):
+                if points[w] == max(points):
+                    winners.append(w)
+                else:
+                    losers.append(w)
+
+            for w in winners:
+                reward[w] = 1/len(winners)
+            for l in losers:
+                reward[l] = -1/len(losers)
 
             logger.debug(f"Game over. Points : {points}")
 
@@ -343,7 +350,7 @@ class BlokusEnv(gym.Env):
             if not self.is_legal(action):
                 self.is_legal(action, debug=True)
                 done = True
-                reward = [1] * self.n_players
+                reward = [1/3] * self.n_players
                 reward[self.current_player_num] = -1
             else:
                 reshaped_boar = np.array(self.board).reshape(self.grid_shape)
@@ -398,8 +405,15 @@ class BlokusEnv(gym.Env):
             logger.debug(f'GAME OVER')
         else:
             printable_board = np.array([x.symbol for x in self.board]).reshape(self.grid_shape)
+            colors = {
+                ".": None,
+                "b": "blue",
+                "g": "green",
+                "r": "red",
+                "y": "yellow"
+            }
             for i in range(0, self.rows):
-                logger.debug(' '.join([x for x in printable_board[i]]))
+                logger.debug(' '.join([colored(x, colors[x]) for x in printable_board[i]]))
 
         if self.verbose:
             logger.debug(f'\nObservation: \n{self.observation}')
