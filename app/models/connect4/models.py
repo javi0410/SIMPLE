@@ -58,7 +58,8 @@ def policy_head(y):
 
 
 def resnet_extractor(y, **kwargs):
-
+    print("Observación:")
+    print(str(y))
     y = convolutional(y, 32, 4)
     y = residual(y, 32, 4)
     y = residual(y, 32, 4)
