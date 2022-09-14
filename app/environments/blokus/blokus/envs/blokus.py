@@ -15,6 +15,42 @@ def all_moves(num_squares):
     moves.append([2200])
     return moves
 
+def is_hot_cell(reshaped_board, x, y, player_symbol):
+    try:
+        if reshaped_board[x + 1][y + 1].symbol == player_symbol:
+            return True
+    except:
+        pass
+    try:
+        if (x - 1) >= 0 and \
+                reshaped_board[x - 1][y + 1].symbol == player_symbol:
+            return True
+    except:
+        pass
+    try:
+        if (y - 1) >= 0 and \
+                reshaped_board[x+ 1][y - 1].symbol == player_symbol:
+            return True
+    except:
+        pass
+    try:
+        if (y - 1) >= 0 and (x - 1) >= 0 and \
+                reshaped_board[x - 1][y - 1].symbol == player_symbol:
+            return True
+    except:
+        pass
+
+    return False
+
+def get_hot_cells_number(reshaped_board, player_symbol):
+    hot_cells = 0
+    for x, v in enumerate(reshaped_board):
+        for y, token in enumerate(v):
+            if is_hot_cell(reshaped_board, x, y, player_symbol):
+                hot_cells += 1
+
+    return hot_cells
+
 
 class Piece():
     def __init__(self, id, super_id, matrix):
@@ -345,6 +381,25 @@ class BlokusEnv(gym.Env):
             logger.debug(f'\nLegal actions: {legal_actions}')
 
     def rules_move(self):
+        movements = all_moves(self.num_squares)
         actions = self.legal_actions
-        masked_action_probs = [1/sum(actions) * a for a in actions]
+
+        masked_action_probs = copy.deepcopy(actions)
+        for action_num in range(self.action_space.n):
+            if actions[action_num] == 1:
+                reshaped_board = copy.deepcopy(np.array(self.board).reshape(self.grid_shape))
+                movement = movements[action_num]
+                square, piece_id, piece_super_id, grid = movement
+                x, y = int(square / self.rows), square % self.cols
+
+                for coordinates in grid:
+                    coord_x, coord_y = coordinates
+                    reshaped_board[x + coord_x][
+                        y + coord_y] = self.current_player.token
+                hot_cells = get_hot_cells_number(reshaped_board, self.current_player.token.symbol)
+                masked_action_probs[action_num] = hot_cells
+            else:
+                hot_cells = 0
+
+        masked_action_probs = [a/sum(masked_action_probs) for a in masked_action_probs]
         return masked_action_probs
