@@ -358,6 +358,7 @@ class BlokusEnv(gym.Env):
                 self.current_player.super_id_pieces = [i for i in self.current_player.super_id_pieces if
                                                        i != piece_super_id]
                 self.board = reshaped_boar.reshape(self.num_squares).tolist()
+                logger.debug(f"El jugador {self.current_player_num} gana {grid.shape[0]} puntos")
                 self.current_player.partial_points += grid.shape[0]
                 self.turns_taken += 1
                 reward, done = self.check_game_over()
