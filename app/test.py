@@ -31,8 +31,12 @@ def main(args):
     
   #make environment
   env = get_environment(args.env_name)(verbose = args.verbose, manual = args.manual)
-  env.seed(args.seed)
-  set_global_seeds(args.seed)
+  if args.seed == -1:
+    seed = random.randint(0, 100)
+  else:
+    seed = args.seed
+  env.seed(seed)
+  set_global_seeds(seed)
 
   total_rewards = {}
 
@@ -159,7 +163,7 @@ def cli() -> None:
             , help="Which game to play?")
   parser.add_argument("--write_results", "-w",  action = 'store_true', default = False
             , help="Write results to a file?")
-  parser.add_argument("--seed", "-s",  type = int, default = 17
+  parser.add_argument("--seed", "-s",  type = int, default = -1
             , help="Random seed")
   parser.add_argument("--results_file", "-rf", type=str, default='results.csv'
                       , help="File to store results")
