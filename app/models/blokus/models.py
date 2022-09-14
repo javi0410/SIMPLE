@@ -4,33 +4,40 @@ import tensorflow as tf
 tf.get_logger().setLevel('INFO')
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
-from tensorflow.keras.layers import BatchNormalization, Activation, Flatten, Conv2D, Add, Dense, Dropout
+from tensorflow.keras.layers import BatchNormalization, Activation, Flatten, \
+    Conv2D, Add, Dense, Dropout
 
 from stable_baselines.common.policies import ActorCriticPolicy
-from stable_baselines.common.distributions import CategoricalProbabilityDistributionType, \
-    CategoricalProbabilityDistribution
+from stable_baselines.common.distributions import \
+    CategoricalProbabilityDistributionType, CategoricalProbabilityDistribution
 
 
 class CustomPolicy(ActorCriticPolicy):
-    def __init__(self, sess, ob_space, ac_space, n_env, n_steps, n_batch, reuse=False, **kwargs):
-        super(CustomPolicy, self).__init__(sess, ob_space, ac_space, n_env, n_steps, n_batch, reuse=reuse, scale=True)
+    def __init__(self, sess, ob_space, ac_space, n_env, n_steps, n_batch,
+                 reuse=False, **kwargs):
+        super(CustomPolicy, self).__init__(sess, ob_space, ac_space, n_env,
+                                           n_steps, n_batch, reuse=reuse,
+                                           scale=True)
 
         with tf.variable_scope("model", reuse=reuse):
             extracted_features = resnet_extractor(self.processed_obs, **kwargs)
             self._policy = policy_head(extracted_features)
             self._value_fn, self.q_value = value_head(extracted_features)
 
-            self._proba_distribution = CategoricalProbabilityDistribution(self._policy)
+            self._proba_distribution = CategoricalProbabilityDistribution(
+                self._policy)
 
         self._setup_init()
 
     def step(self, obs, state=None, mask=None, deterministic=False):
         if deterministic:
-            action, value, neglogp = self.sess.run([self.deterministic_action, self.value_flat, self.neglogp],
-                                                   {self.obs_ph: obs})
+            action, value, neglogp = self.sess.run(
+                [self.deterministic_action, self.value_flat, self.neglogp],
+                {self.obs_ph: obs})
         else:
-            action, value, neglogp = self.sess.run([self.action, self.value_flat, self.neglogp],
-                                                   {self.obs_ph: obs})
+            action, value, neglogp = self.sess.run(
+                [self.action, self.value_flat, self.neglogp],
+                {self.obs_ph: obs})
         return action, value, self.initial_state, neglogp
 
     def proba_step(self, obs, state=None, mask=None):
@@ -56,12 +63,21 @@ def policy_head(y):
     return policy
 
 
-
 def resnet_extractor(y, **kwargs):
+    print("Observación:")
+    print(y)
     y = convolutional(y, 32, 4)
+    print("Despues de convolucional:")
+    print(y)
     y = residual(y, 32, 4)
+    print("Despues de residual 1:")
+    print(y)
     y = residual(y, 32, 4)
+    print("Despues de residual 2:")
+    print(y)
     y = residual(y, 32, 4)
+    print("Despues de residual 3:")
+    print(y)
 
     return y
 
@@ -104,3 +120,5 @@ def dense(y, filters, batch_norm=True, activation='relu', name=None):
         y = Activation(activation, name=name)(y)
 
     return y
+
+
