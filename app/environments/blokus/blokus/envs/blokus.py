@@ -42,34 +42,29 @@ def has_adyacent_occupied_cells(reshaped_board, x, y, player_symbol):
     return False
 
 def is_hot_cell(reshaped_board, x, y, player_symbol):
+    if has_adyacent_occupied_cells(reshaped_board, x, y, player_symbol):
+        return False
     try:
         if reshaped_board[x + 1][y + 1].symbol == player_symbol:
-            if not has_adyacent_occupied_cells(reshaped_board, x+1, y+1, player_symbol):
-                return True
+            return True
     except:
         pass
     try:
         if (x - 1) >= 0 and \
                 reshaped_board[x - 1][y + 1].symbol == player_symbol:
-            if not has_adyacent_occupied_cells(reshaped_board, x - 1, y + 1,
-                                               player_symbol):
-                return True
+            return True
     except:
         pass
     try:
         if (y - 1) >= 0 and \
                 reshaped_board[x+ 1][y - 1].symbol == player_symbol:
-            if not has_adyacent_occupied_cells(reshaped_board, x + 1, y - 1,
-                                               player_symbol):
-                return True
+            return True
     except:
         pass
     try:
         if (y - 1) >= 0 and (x - 1) >= 0 and \
                 reshaped_board[x - 1][y - 1].symbol == player_symbol:
-            if not has_adyacent_occupied_cells(reshaped_board, x - 1, y - 1,
-                                               player_symbol):
-                return True
+            return True
     except:
         pass
 
