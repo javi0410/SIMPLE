@@ -110,7 +110,7 @@ class BlokusEnv(gym.Env):
 
     def __init__(self, verbose=False, manual=False):
         super(BlokusEnv, self).__init__()
-        self.name = 'Blokus'
+        self.name = 'blokus'
         self.manual = manual
 
         self.rows = 10
