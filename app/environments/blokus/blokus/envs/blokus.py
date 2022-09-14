@@ -15,28 +15,61 @@ def all_moves(num_squares):
     moves.append([2200])
     return moves
 
-def is_hot_cell(reshaped_board, x, y, player_symbol):
+def has_adyacent_occupied_cells(reshaped_board, x, y, player_symbol):
     try:
-        if reshaped_board[x + 1][y + 1].symbol == player_symbol:
+        if reshaped_board[x + 1][y].symbol == player_symbol:
             return True
     except:
         pass
     try:
         if (x - 1) >= 0 and \
-                reshaped_board[x - 1][y + 1].symbol == player_symbol:
+                reshaped_board[x - 1][y].symbol == player_symbol:
             return True
     except:
         pass
     try:
         if (y - 1) >= 0 and \
-                reshaped_board[x+ 1][y - 1].symbol == player_symbol:
+                reshaped_board[x][y - 1].symbol == player_symbol:
             return True
+    except:
+        pass
+    try:
+        if reshaped_board[x][y + 1].symbol == player_symbol:
+            return True
+    except:
+        pass
+
+    return False
+
+def is_hot_cell(reshaped_board, x, y, player_symbol):
+    try:
+        if reshaped_board[x + 1][y + 1].symbol == player_symbol:
+            if not has_adyacent_occupied_cells(reshaped_board, x+1, y+1, player_symbol):
+                return True
+    except:
+        pass
+    try:
+        if (x - 1) >= 0 and \
+                reshaped_board[x - 1][y + 1].symbol == player_symbol:
+            if not has_adyacent_occupied_cells(reshaped_board, x - 1, y + 1,
+                                               player_symbol):
+                return True
+    except:
+        pass
+    try:
+        if (y - 1) >= 0 and \
+                reshaped_board[x+ 1][y - 1].symbol == player_symbol:
+            if not has_adyacent_occupied_cells(reshaped_board, x + 1, y - 1,
+                                               player_symbol):
+                return True
     except:
         pass
     try:
         if (y - 1) >= 0 and (x - 1) >= 0 and \
                 reshaped_board[x - 1][y - 1].symbol == player_symbol:
-            return True
+            if not has_adyacent_occupied_cells(reshaped_board, x - 1, y - 1,
+                                               player_symbol):
+                return True
     except:
         pass
 
