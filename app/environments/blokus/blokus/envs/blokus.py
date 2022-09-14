@@ -334,8 +334,6 @@ class BlokusEnv(gym.Env):
     def step(self, action):
         reward = [0] * self.n_players
         done = False
-        logger.info(f"Jugador {self.current_player_num} hace movimiento")
-
         if action == 2200:
             self.players[self.current_player_num].eliminated = True
             reward, done = self.check_game_over()
@@ -372,7 +370,6 @@ class BlokusEnv(gym.Env):
         return self.observation, reward, done, {}
 
     def reset(self):
-        logger.info("Empezando partida")
         self.board = [0] * self.num_squares
         self.board = [Token('.', 0)] * self.num_squares
         # self.board[0] = [Token('b', 5)]
