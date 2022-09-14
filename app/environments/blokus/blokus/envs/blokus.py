@@ -334,6 +334,7 @@ class BlokusEnv(gym.Env):
     def step(self, action):
         reward = [0] * self.n_players
         done = False
+        logger.info(f"Jugador {self.current_player_num} hace movimiento")
 
         if action == 2200:
             self.players[self.current_player_num].eliminated = True
