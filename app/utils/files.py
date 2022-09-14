@@ -20,7 +20,7 @@ import config
 from stable_baselines import logger
 
 
-def write_results(players, game, games, episode_length):
+def write_results(players, game, games, episode_length, results_file):
     
     out = {'game': game
     , 'games': games
@@ -31,12 +31,21 @@ def write_results(players, game, games, episode_length):
     , 'p2_points': np.sum([x.points for x in players[1:]])
     }
 
-    if not os.path.exists(config.RESULTSPATH):
-        with open(config.RESULTSPATH,'a') as csvfile:
+    out = {'game': game
+    , 'games': games
+    , 'episode_length': episode_length}
+    for i, player in enumerate(players):
+        out[f"p{i}"] = player.name
+    for i, player in enumerate(players):
+        out[f"p{i}_points"] = player.points
+
+    results_path = config.RESULTSDIR + "/" + results_file
+    if not os.path.exists(results_path):
+        with open(results_path,'a') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=out.keys())
             writer.writeheader()
 
-    with open(config.RESULTSPATH,'a') as csvfile:
+    with open(results_path,'a') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=out.keys())
         writer.writerow(out)
 

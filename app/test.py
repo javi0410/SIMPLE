@@ -117,7 +117,7 @@ def main(args):
     logger.info(f"Played {game + 1} games: {total_rewards}")
 
     if args.write_results:
-      write_results(players, game, args.games, env.turns_taken)
+      write_results(players, game, args.games, env.turns_taken, args.results_file)
 
     for p in players:
       p.points = 0
@@ -161,6 +161,8 @@ def cli() -> None:
             , help="Write results to a file?")
   parser.add_argument("--seed", "-s",  type = int, default = 17
             , help="Random seed")
+  parser.add_argument("--results_file", "-rf", type=str, default='results.csv'
+                      , help="File to store results")
 
   # Extract args
   args = parser.parse_args()

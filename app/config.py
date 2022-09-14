@@ -6,6 +6,7 @@ ERROR = 40
 DISABLED = 50
 
 LOGDIR = "logs"
-RESULTSPATH = 'viz/results.csv'
+RESULTSDIR= "viz"
+RESULTSPATH = RESULTSDIR + '/results.csv'
 TMPMODELDIR = "zoo/tmp"
 MODELDIR = "zoo"
