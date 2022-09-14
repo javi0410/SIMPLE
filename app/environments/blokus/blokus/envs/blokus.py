@@ -433,5 +433,9 @@ class BlokusEnv(gym.Env):
             else:
                 hot_cells = 0
 
-        masked_action_probs = [a/sum(masked_action_probs) for a in masked_action_probs]
+        s = sum(masked_action_probs)
+        if s != 0:
+            masked_action_probs = [a / s for a in masked_action_probs]
+        else:
+            masked_action_probs = [a / sum(actions) for a in actions]
         return masked_action_probs
