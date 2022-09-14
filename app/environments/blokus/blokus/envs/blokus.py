@@ -371,6 +371,7 @@ class BlokusEnv(gym.Env):
         return self.observation, reward, done, {}
 
     def reset(self):
+        logger.info("Empezando partida")
         self.board = [0] * self.num_squares
         self.board = [Token('.', 0)] * self.num_squares
         # self.board[0] = [Token('b', 5)]

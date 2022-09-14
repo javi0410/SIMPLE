@@ -52,32 +52,22 @@ def value_head(y):
     y = Flatten()(y)
     y = dense(y, 128, batch_norm=False)
     vf = dense(y, 1, batch_norm=False, activation='tanh', name='vf')
-    q = dense(y, 7, batch_norm=False, activation='tanh', name='q')
+    q = dense(y, 2201, batch_norm=False, activation='tanh', name='q')
     return vf, q
 
 
 def policy_head(y):
     y = convolutional(y, 4, 1)
     y = Flatten()(y)
-    policy = dense(y, 7, batch_norm=False, activation=None, name='pi')
+    policy = dense(y, 2201, batch_norm=False, activation=None, name='pi')
     return policy
 
 
 def resnet_extractor(y, **kwargs):
-    print("Observación:")
-    print(y)
     y = convolutional(y, 32, 4)
-    print("Despues de convolucional:")
-    print(y)
     y = residual(y, 32, 4)
-    print("Despues de residual 1:")
-    print(y)
     y = residual(y, 32, 4)
-    print("Despues de residual 2:")
-    print(y)
     y = residual(y, 32, 4)
-    print("Despues de residual 3:")
-    print(y)
 
     return y
 
