@@ -120,5 +120,3 @@ def dense(y, filters, batch_norm=True, activation='relu', name=None):
         y = Activation(activation, name=name)(y)
 
     return y
-
-
