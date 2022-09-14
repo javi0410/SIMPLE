@@ -34,6 +34,7 @@ def get_environment(env_name):
 
 
 def get_network_arch(env_name):
+    print(f"El env_name es: {env_name}")
     if env_name in ('tictactoe'):
         from models.tictactoe.models import CustomPolicy
         return CustomPolicy
