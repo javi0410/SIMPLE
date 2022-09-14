@@ -386,7 +386,7 @@ class BlokusEnv(gym.Env):
 
         masked_action_probs = copy.deepcopy(actions)
         for action_num in range(self.action_space.n):
-            if actions[action_num] == 1:
+            if actions[action_num] == 1 and action_num != 2200:
                 reshaped_board = copy.deepcopy(np.array(self.board).reshape(self.grid_shape))
                 movement = movements[action_num]
                 square, piece_id, piece_super_id, grid = movement
@@ -398,6 +398,8 @@ class BlokusEnv(gym.Env):
                         y + coord_y] = self.current_player.token
                 hot_cells = get_hot_cells_number(reshaped_board, self.current_player.token.symbol)
                 masked_action_probs[action_num] = hot_cells
+            elif action_num == 2200:
+                hot_cells = 1
             else:
                 hot_cells = 0
 
