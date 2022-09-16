@@ -42,9 +42,7 @@ class CustomPolicy(ActorCriticPolicy):
         return action, value, self.initial_state, neglogp
 
     def proba_step(self, obs, state=None, mask=None):
-        out = self.sess.run(self.policy_proba, {self.obs_ph: obs})
-        print(out)
-        return out
+        return self.sess.run(self.policy_proba, {self.obs_ph: obs})
 
     def value(self, obs, state=None, mask=None):
         return self.sess.run(self.value_flat, {self.obs_ph: obs})
@@ -63,9 +61,11 @@ def policy_head(y, legal_actions):
     y = convolutional(y, 4, 1)
     y = Flatten()(y)
     policy = dense(y, 2201, batch_norm=False, activation=None, name='pi')
-
     mask = Lambda(lambda x: (1 - x) * -1e8)(legal_actions)
-
+    print("policy:")
+    print(policy)
+    print("mask:")
+    print(mask)
     policy = Add()([policy, mask])
     return policy
 
