@@ -67,6 +67,8 @@ def policy_head(y, legal_actions):
     print("mask:")
     print(mask)
     policy = Add()([policy, mask])
+    print("policy after:")
+    print(policy)
     return policy
 
 
