@@ -135,9 +135,9 @@ class BlokusEnv(gym.Env):
         position_4 = np.array([1 if x.number == ((player + 3) % 4) + 1 else 0 for x in self.board]).reshape(
             self.grid_shape)
         # TODO Agregar mas información (como por ejemplo hotcells)
-        # position_5 = np.array([self.can_be_placed(i) for i, x in enumerate(self.board)]).reshape(self.grid_shape)
+        legal_actions = np.array(self.legal_actions_uncached)
 
-        out = np.stack([position_1, position_2, position_3, position_4, ], axis=-1)
+        out = np.stack([position_1, position_2, position_3, position_4, legal_actions], axis=-1)
         return out
 
     @property
