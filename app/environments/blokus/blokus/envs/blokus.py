@@ -139,7 +139,7 @@ class BlokusEnv(gym.Env):
 
         out = np.stack([position_1, position_2, position_3, position_4,], axis=-1)
         print(out)
-        return out
+        return out, legal_actions
 
     @property
     def legal_actions_uncached(self):
