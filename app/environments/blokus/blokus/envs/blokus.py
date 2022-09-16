@@ -143,8 +143,6 @@ class BlokusEnv(gym.Env):
         legal_actions_r.resize(10, 10, 22)
 
         out = np.concatenate((obs, legal_actions_r), axis=2)
-        print(f"LEGAL_ACTIONS ENV for player {self.current_player_num}")
-        print(str(sum(out[:,:,4:].flatten())))
         return out
 
     @property

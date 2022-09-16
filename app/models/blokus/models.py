@@ -42,10 +42,6 @@ class CustomPolicy(ActorCriticPolicy):
         return action, value, self.initial_state, neglogp
 
     def proba_step(self, obs, state=None, mask=None):
-        print("Tablero")
-        print(obs[:, :, :, :4])
-        print("Legal actions")
-        print(sum(obs[:, :, :, 4:].flatten()))
         return self.sess.run(self.policy_proba, {self.obs_ph: obs})
 
     def value(self, obs, state=None, mask=None):
@@ -124,5 +120,6 @@ def dense(y, filters, batch_norm=True, activation='relu', name=None):
 def input_split(processed_obs):
     obs = processed_obs[:, :, :, :4]
     legal_actions = tf.reshape(processed_obs[:, :, :, 4:], [-1])
+    print(obs.shape)
     return obs, legal_actions
 
