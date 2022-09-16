@@ -120,7 +120,7 @@ def dense(y, filters, batch_norm=True, activation='relu', name=None):
 
 
 def input_split(processed_obs):
-    obs = processed_obs[:,:,4:]
-    legal_actions = tf.reshape(processed_obs[:,:,4:], [-1])
+    obs = processed_obs[:, :, :4]
+    legal_actions = tf.reshape(processed_obs[:, :, 4:], [-1])
     return obs, legal_actions
 
