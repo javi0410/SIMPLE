@@ -23,7 +23,7 @@ class CustomPolicy(ActorCriticPolicy):
             print("\n\nOBSERVACION: ")
             print(str(self.processed_obs))
 
-            processed_obs, legal_actions = split_obs(self.processed_obs)
+            #processed_obs, legal_actions = split_obs(self.processed_obs)
             extracted_features = resnet_extractor(self.processed_obs, **kwargs)
             self._policy = policy_head(extracted_features)
             self._value_fn, self.q_value = value_head(extracted_features)
