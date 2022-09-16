@@ -121,7 +121,11 @@ class BlokusEnv(gym.Env):
         self.grid_shape = (self.rows, self.cols)
         self.num_squares = self.rows * self.cols
         self.action_space = gym.spaces.Discrete(len(all_moves(self.num_squares)))
-        self.observation_space = gym.spaces.Box(-1, 1, self.grid_shape + (self.n_players,))
+        self.observation_space = gym.spaces.Dict(
+            {
+                "obs" : gym.spaces.Box(0, 1, self.grid_shape + (self.n_players,)),
+                "legal_actions": gym.spaces.Box(0, 1, (2101))
+            })
         self.verbose = verbose
 
     @property
@@ -137,8 +141,12 @@ class BlokusEnv(gym.Env):
         # TODO Agregar mas información (como por ejemplo hotcells)
         legal_actions = np.array(self.legal_actions_uncached)
 
-        out = np.stack([position_1, position_2, position_3, position_4], axis=-1)
-        return out, legal_actions
+        obs = np.stack([position_1, position_2, position_3, position_4], axis=-1)
+        out = {
+            "obs": obs,
+            "legal_actions": legal_actions
+        }
+        return out
 
     @property
     def legal_actions_uncached(self):

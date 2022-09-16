@@ -20,6 +20,8 @@ class CustomPolicy(ActorCriticPolicy):
                                            scale=True)
 
         with tf.variable_scope("model", reuse=reuse):
+            print("\n\nOBSERVATION:")
+            print(self.processed_obs)
             extracted_features = resnet_extractor(self.processed_obs, **kwargs)
             self._policy = policy_head(extracted_features)
             self._value_fn, self.q_value = value_head(extracted_features)
@@ -30,8 +32,6 @@ class CustomPolicy(ActorCriticPolicy):
         self._setup_init()
 
     def step(self, obs, state=None, mask=None, deterministic=False):
-        print("\n\nOBSERVACION:")
-        print(str(obs))
         if deterministic:
             action, value, neglogp = self.sess.run(
                 [self.deterministic_action, self.value_flat, self.neglogp],
@@ -116,3 +116,4 @@ def dense(y, filters, batch_norm=True, activation='relu', name=None):
         y = Activation(activation, name=name)(y)
 
     return y
+
