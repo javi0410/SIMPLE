@@ -141,7 +141,7 @@ class BlokusEnv(gym.Env):
             (np.array(self.legal_actions_uncached), np.zeros(99))
         )
         print("LEGAL_ACTIONS ENV")
-        print(str(legal_actions_r))
+        print(str(sum(legal_actions_r)))
         legal_actions_r.resize(10, 10, 22)
 
         out = np.concatenate((obs, legal_actions_r), axis=2)
