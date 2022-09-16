@@ -43,7 +43,9 @@ class CustomPolicy(ActorCriticPolicy):
 
     def proba_step(self, obs, state=None, mask=None):
         print("OBS:")
-        print(obs)
+        print(obs[:,:,4])
+        print("Legal actions")
+        print(obs[:,:,4:]).flatten()
         return self.sess.run(self.policy_proba, {self.obs_ph: obs})
 
     def value(self, obs, state=None, mask=None):
