@@ -43,9 +43,9 @@ class CustomPolicy(ActorCriticPolicy):
 
     def proba_step(self, obs, state=None, mask=None):
         print("Tablero")
-        print(obs[0, :, :, :4])
+        print(obs[:, :, :, :4])
         print("Legal actions")
-        print(sum(obs[0, :, :, 4:].flatten()))
+        print(sum(obs[:, :, :, 4:].flatten()))
         return self.sess.run(self.policy_proba, {self.obs_ph: obs})
 
     def value(self, obs, state=None, mask=None):
