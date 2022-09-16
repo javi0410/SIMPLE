@@ -42,8 +42,9 @@ class CustomPolicy(ActorCriticPolicy):
         return action, value, self.initial_state, neglogp
 
     def proba_step(self, obs, state=None, mask=None):
-        legal_actions = obs[:, :, :, 4:].flatten()
+        legal_actions = list(obs[:, :, :, 4:].flatten())
         print("Legal actions:")
+        print(f"len: {len(legal_actions)}")
         l = []
         for i, a in legal_actions:
             if a == 1:
