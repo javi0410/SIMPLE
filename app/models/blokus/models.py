@@ -60,14 +60,14 @@ def value_head(y):
     return vf, q
 
 
-def policy_head(y, legal_actions):
+def policy_head(y):
     y = convolutional(y, 4, 1)
     y = Flatten()(y)
     policy = dense(y, 2201, batch_norm=False, activation=None, name='pi')
 
-    mask = Lambda(lambda x: (1 - x) * -1e8)(legal_actions)
+    #mask = Lambda(lambda x: (1 - x) * -1e8)(legal_actions)
 
-    policy = Add()([policy, mask])
+    #policy = Add()([policy, mask])
     return policy
 
 
