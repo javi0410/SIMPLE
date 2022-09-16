@@ -30,6 +30,7 @@ class Agent():
       self.points = 0
 
   def print_top_actions(self, action_probs):
+    print(action_probs)
     top5_action_idx = np.argsort(-action_probs)[:5]
     top5_actions = action_probs[top5_action_idx]
     logger.debug(f"Top 5 actions: {[str(i) + ': ' + str(round(a,2))[:5] for i,a in zip(top5_action_idx, top5_actions)]}")

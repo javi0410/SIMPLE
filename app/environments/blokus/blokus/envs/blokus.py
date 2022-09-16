@@ -121,7 +121,7 @@ class BlokusEnv(gym.Env):
         self.grid_shape = (self.rows, self.cols)
         self.num_squares = self.rows * self.cols
         self.action_space = gym.spaces.Discrete(len(all_moves(self.num_squares)))
-        self.observation_space = gym.spaces.Box(0, 1, self.grid_shape + (self.n_players + 22,))
+        self.observation_space = gym.spaces.Box(0, 1, self.grid_shape + (self.n_players + 23,))
         self.verbose = verbose
 
     @property
@@ -140,8 +140,7 @@ class BlokusEnv(gym.Env):
         legal_actions_r = np.concatenate(
             (np.array(self.legal_actions_uncached), np.zeros(99))
         )
-        print(f"LEN: {len(legal_actions_r)}")
-        legal_actions_r.resize(10, 10, 22)
+        legal_actions_r.resize(10, 10, 23)
 
         out = np.concatenate((obs, legal_actions_r), axis=2)
         return out
