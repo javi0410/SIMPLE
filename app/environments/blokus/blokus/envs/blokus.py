@@ -121,11 +121,7 @@ class BlokusEnv(gym.Env):
         self.grid_shape = (self.rows, self.cols)
         self.num_squares = self.rows * self.cols
         self.action_space = gym.spaces.Discrete(len(all_moves(self.num_squares)))
-        self.observation_space = gym.spaces.Dict(
-            {
-                "obs" : gym.spaces.Box(0, 1, self.grid_shape + (self.n_players,)),
-                "legal_actions": gym.spaces.Box(0, 1, (2101,))
-            })
+        self.observation_space = gym.spaces.Box(0, 1, self.grid_shape + (self.n_players + 22,))
         self.verbose = verbose
 
     @property
@@ -138,14 +134,15 @@ class BlokusEnv(gym.Env):
             self.grid_shape)
         position_4 = np.array([1 if x.number == ((player + 3) % 4) + 1 else 0 for x in self.board]).reshape(
             self.grid_shape)
+        obs = np.stack([position_1, position_2, position_3, position_4],
+                       axis=-1)
         # TODO Agregar mas información (como por ejemplo hotcells)
-        legal_actions = np.array(self.legal_actions_uncached)
+        legal_actions_r = np.concatenate(
+            (np.array(self.legal_actions_uncached), np.zeros(99))
+        )
+        legal_actions_r.resize(10, 10, 22)
 
-        obs = np.stack([position_1, position_2, position_3, position_4], axis=-1)
-        out = {
-            "obs": obs,
-            "legal_actions": legal_actions
-        }
+        out = np.concatenate((obs, legal_actions_r), axis=2)
         return out
 
     @property

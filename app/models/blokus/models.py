@@ -5,7 +5,7 @@ tf.get_logger().setLevel('INFO')
 tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 
 from tensorflow.keras.layers import BatchNormalization, Activation, Flatten, \
-    Conv2D, Add, Dense, Dropout
+    Conv2D, Add, Dense, Lambda
 
 from stable_baselines.common.policies import ActorCriticPolicy
 from stable_baselines.common.distributions import \
@@ -20,10 +20,9 @@ class CustomPolicy(ActorCriticPolicy):
                                            scale=True)
 
         with tf.variable_scope("model", reuse=reuse):
-            print("\n\nOBSERVATION:")
-            print(self.processed_obs)
-            extracted_features = resnet_extractor(self.processed_obs, **kwargs)
-            self._policy = policy_head(extracted_features)
+            obs, legal_actions = input_split(self.processed_obs)
+            extracted_features = resnet_extractor(obs, **kwargs)
+            self._policy = policy_head(extracted_features, legal_actions)
             self._value_fn, self.q_value = value_head(extracted_features)
 
             self._proba_distribution = CategoricalProbabilityDistribution(
@@ -58,14 +57,14 @@ def value_head(y):
     return vf, q
 
 
-def policy_head(y):
+def policy_head(y, legal_actions):
     y = convolutional(y, 4, 1)
     y = Flatten()(y)
     policy = dense(y, 2201, batch_norm=False, activation=None, name='pi')
 
-    #mask = Lambda(lambda x: (1 - x) * -1e8)(legal_actions)
+    mask = Lambda(lambda x: (1 - x) * -1e8)(legal_actions)
 
-    #policy = Add()([policy, mask])
+    policy = Add()([policy, mask])
     return policy
 
 
@@ -116,4 +115,10 @@ def dense(y, filters, batch_norm=True, activation='relu', name=None):
         y = Activation(activation, name=name)(y)
 
     return y
+
+
+def input_split(processed_obs):
+    obs = processed_obs[:,:,4:]
+    legal_actions = tf.reshape(processed_obs[:,:,4:], [-1])
+    return obs, legal_actions
 
