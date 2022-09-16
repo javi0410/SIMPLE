@@ -44,7 +44,7 @@ class CustomPolicy(ActorCriticPolicy):
     def proba_step(self, obs, state=None, mask=None):
         out =  self.sess.run(self.policy_proba, {self.obs_ph: obs})
         print("SALIDA PROBA STEP")
-        print(out)
+        print(str(len(out)))
         return out
 
     def value(self, obs, state=None, mask=None):
