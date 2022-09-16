@@ -62,13 +62,7 @@ def policy_head(y, legal_actions):
     y = Flatten()(y)
     policy = dense(y, 2201, batch_norm=False, activation=None, name='pi')
     mask = Lambda(lambda x: (1 - x) * -1e8)(legal_actions)
-    print("policy:")
-    print(policy)
-    print("mask:")
-    print(mask)
     policy = Add()([policy, mask])
-    print("policy after:")
-    print(policy)
     return policy
 
 
