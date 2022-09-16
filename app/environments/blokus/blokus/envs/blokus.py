@@ -137,9 +137,9 @@ class BlokusEnv(gym.Env):
         # TODO Agregar mas información (como por ejemplo hotcells)
         legal_actions = np.array(self.legal_actions_uncached)
 
-        out = np.stack([position_1, position_2, position_3, position_4,], axis=-1)
+        out = np.stack([position_1, position_2, position_3, position_4, legal_actions], axis=-1)
         print(out)
-        return out, legal_actions
+        return out
 
     @property
     def legal_actions_uncached(self):
