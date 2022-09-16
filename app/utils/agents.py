@@ -40,7 +40,6 @@ class Agent():
         value = None
       else:
         action_probs = self.model.action_probability(env.observation)
-        logger.debug(action_probs)
         value = self.model.policy_pi.value(np.array([env.observation]))[0]
         logger.debug(f'Value {value:.2f}')
 

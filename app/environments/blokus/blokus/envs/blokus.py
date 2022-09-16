@@ -140,6 +140,7 @@ class BlokusEnv(gym.Env):
         legal_actions_r = np.concatenate(
             (np.array(self.legal_actions_uncached), np.zeros(99))
         )
+        print(f"LEN: {len(legal_actions_r)}")
         legal_actions_r.resize(10, 10, 22)
 
         out = np.concatenate((obs, legal_actions_r), axis=2)
