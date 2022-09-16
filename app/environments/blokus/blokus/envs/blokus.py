@@ -124,7 +124,7 @@ class BlokusEnv(gym.Env):
         self.observation_space = gym.spaces.Dict(
             {
                 "obs" : gym.spaces.Box(0, 1, self.grid_shape + (self.n_players,)),
-                "legal_actions": gym.spaces.Box(0, 1, (2101))
+                "legal_actions": gym.spaces.Box(0, 1, (2101,))
             })
         self.verbose = verbose
 
