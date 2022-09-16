@@ -46,7 +46,7 @@ class CustomPolicy(ActorCriticPolicy):
         print("Legal actions:")
         print(f"len: {len(legal_actions)}")
         l = []
-        for i, a in legal_actions:
+        for i, a in enumerate(legal_actions):
             if a == 1:
                 l.append(i)
         print(l)
