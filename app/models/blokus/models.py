@@ -21,6 +21,7 @@ class CustomPolicy(ActorCriticPolicy):
 
         with tf.variable_scope("model", reuse=reuse):
             obs, legal_actions = input_split(self.processed_obs)
+            print(legal_actions.eval(session=self.sess))
             extracted_features = resnet_extractor(obs, **kwargs)
             self._policy = policy_head(extracted_features, legal_actions)
             self._value_fn, self.q_value = value_head(extracted_features)
@@ -45,11 +46,7 @@ class CustomPolicy(ActorCriticPolicy):
         legal_actions = list(obs[:, :, :, 4:].flatten())
         print("Legal actions:")
         print(f"len: {len(legal_actions)}")
-        l = []
-        for i, a in enumerate(legal_actions):
-            if a == 1:
-                l.append(i)
-        print(l)
+        print(str([(1 - x) * -1e8 for x in legal_actions]))
         return self.sess.run(self.policy_proba, {self.obs_ph: obs})
 
     def value(self, obs, state=None, mask=None):
