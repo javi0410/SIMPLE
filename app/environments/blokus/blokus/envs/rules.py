@@ -78,7 +78,7 @@ def is_legal(movements, action_num, reshaped_board, symbol, has_started, remaini
     square, piece_id, piece_super_id, grid = movement
     x, y = int(square / 10), square % 10
     if action_num == 243:
-        print(f"Action {action_num}: piece: {piece_super_id}, grid: {grid}")
+        print(f"Action {action_num}: piece: {piece_super_id}, grid: {grid}, ini : ({x}, {y})")
     if piece_super_id in remaining_pieces:  # El jugador posee la ficha
         for coordinates in grid:  # Chequeo casilla en blanco
             coord_x, coord_y = coordinates
@@ -86,10 +86,16 @@ def is_legal(movements, action_num, reshaped_board, symbol, has_started, remaini
                 if (x + coord_x) < 0 or (y + coord_y) < 0 or (
                         x + coord_x) >= 10 or (
                         y + coord_y) >= 10:
+                    if action_num == 243:
+                        print(1)
                     return 0
                 if reshaped_board[x + coord_x][y + coord_y].number != 0:
+                    if action_num == 243:
+                        print(2)
                     return 0
             except:
+                if action_num == 243:
+                    print(3)
                 return 0
         for coordinates in grid:  # Chequeo adyacentes diferentes al color del jugador
             coord_x, coord_y = coordinates
@@ -103,6 +109,8 @@ def is_legal(movements, action_num, reshaped_board, symbol, has_started, remaini
             else:
                 if reshaped_board[x + coord_x + 1][
                     y + coord_y].symbol == symbol:
+                    if action_num == 243:
+                        print(4)
                     return 0
             """
             CASILLA DE ARRIBA
@@ -114,6 +122,8 @@ def is_legal(movements, action_num, reshaped_board, symbol, has_started, remaini
             else:
                 if reshaped_board[x + coord_x - 1][
                     y + coord_y].symbol == symbol:
+                    if action_num == 243:
+                        print(5)
                     return 0
 
             """
@@ -126,6 +136,8 @@ def is_legal(movements, action_num, reshaped_board, symbol, has_started, remaini
             else:
                 if reshaped_board[x + coord_x][
                     y + coord_y + 1].symbol == symbol:
+                    if action_num == 243:
+                        print(6)
                     return 0
 
             """
@@ -138,6 +150,8 @@ def is_legal(movements, action_num, reshaped_board, symbol, has_started, remaini
             else:
                 if reshaped_board[x + coord_x][
                     y + coord_y - 1].symbol == symbol:
+                    if action_num == 243:
+                        print(7)
                     return 0
 
         if not has_started:  # Primera pieza que coloca el jugador
@@ -186,7 +200,11 @@ def is_legal(movements, action_num, reshaped_board, symbol, has_started, remaini
             except:
                 pass
     else:
+        if action_num == 243:
+            print(8)
         return 0
+    if action_num == 243:
+        print(9)
     return 0
 
 def print_board(reshaped_board):
