@@ -190,7 +190,7 @@ def get_posible_actions_number(movements, reshaped_board, symbol, has_started, r
         legal = is_legal(movements, action_num, reshaped_board, symbol, has_started, remaining_pieces)
         legal_actions.append(legal)
 
-        print(f"Action  {action_num} gives {sum(legal_actions)}")
+    print(f"Action  {action_num} gives {sum(legal_actions)}")
     if all(item == 0 for item in legal_actions):
         legal_actions[2200] = 1
 
