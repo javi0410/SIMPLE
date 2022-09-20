@@ -137,6 +137,7 @@ class BlokusEnv(gym.Env):
         obs = np.stack([position_1, position_2, position_3, position_4],
                        axis=-1)
         # TODO Agregar mas información (como por ejemplo hotcells)
+        print("legal actions  en observations")
         legal_actions_r = np.concatenate(
             (np.array(self.legal_actions_uncached), np.zeros(99))
         )
@@ -154,6 +155,8 @@ class BlokusEnv(gym.Env):
 
         if all(item == 0 for item in legal_actions):
             legal_actions[2200] = 1
+
+        # self.legal_actions = copy.deepcopy(np.array(legal_actions))
         return np.array(legal_actions)
 
     def is_legal(self, action_num, debug=False):
@@ -424,6 +427,7 @@ class BlokusEnv(gym.Env):
             logger.debug(f'\nObservation: \n{self.observation}')
 
         if not self.done:
+            print("legal_actions en render")
             self.legal_actions = copy.deepcopy(self.legal_actions_uncached)
             legal_actions = [i for i, o in enumerate(self.legal_actions) if o == 1]
 
