@@ -398,12 +398,9 @@ class BlokusEnv(gym.Env):
         return self.observation, reward, done, {}
 
     def reset(self):
+        print("Iniciando partida")
         self.board = [0] * self.num_squares
         self.board = [Token('.', 0)] * self.num_squares
-        # self.board[0] = [Token('b', 5)]
-        # self.board[self.cols - 1] = [Token('g', 6)]
-        # self.board[self.num_squares - self.cols - 1] = [Token('r', 7)]
-        # self.board[-1] = [Token('y', 8)]
 
         super_id_pieces = [i for i in range(10)]
         self.players = [Player(0, Token('b', 1), copy.deepcopy(super_id_pieces)),
@@ -439,7 +436,6 @@ class BlokusEnv(gym.Env):
             logger.debug(f'\nObservation: \n{self.observation}')
 
         if not self.done:
-            print("legal_actions en render")
             legal_actions = [i for i, o in enumerate(self.legal_actions) if o == 1]
 
             logger.debug(f'\nLegal actions: {legal_actions}')
