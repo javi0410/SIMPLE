@@ -432,6 +432,7 @@ class BlokusEnv(gym.Env):
                             self.current_player_num].has_started,
                         remain_pieces
                     )
+                    print(f"Action  {action_num} gives {pos_actions}")
                     masked_action_probs[action_num] = pos_actions
                 elif action_num == 2200:
                     masked_action_probs[action_num] = 1
