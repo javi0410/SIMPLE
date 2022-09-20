@@ -123,6 +123,7 @@ class BlokusEnv(gym.Env):
         self.action_space = gym.spaces.Discrete(len(all_moves(self.num_squares)))
         self.observation_space = gym.spaces.Box(0, 1, self.grid_shape + (self.n_players + 23,))
         self.verbose = verbose
+        self.legal_actions = None
 
     @property
     def observation(self):
