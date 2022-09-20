@@ -190,7 +190,7 @@ def is_legal(movements, action_num, reshaped_board, symbol, has_started, remaini
 def get_posible_actions_number(movements, reshaped_board, symbol, has_started, remaining_pieces):
     legal_actions = []
     for action_num in range(2201):
-        printable_board = np.array([x.symbol for x in reshaped_board])
+        printable_board = np.array([[y.symbol for y in x] for x in reshaped_board])
         colors = {
             ".": None,
             "b": "blue",
