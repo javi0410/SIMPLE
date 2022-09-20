@@ -392,12 +392,10 @@ class BlokusEnv(gym.Env):
         if not done:
             self.current_player_num = (self.current_player_num + 1) % self.n_players
 
-        obs = self.observation
-
         self.legal_actions_cached = None
         self.is_legal_actions_cached = False
 
-        return obs, reward, done, {}
+        return self.observation, reward, done, {}
 
     def reset(self):
         self.board = [0] * self.num_squares
