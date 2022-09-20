@@ -424,15 +424,14 @@ class BlokusEnv(gym.Env):
                     remain_pieces = copy.deepcopy(self.players[
                             self.current_player_num].super_id_pieces)
                     remain_pieces.remove(piece_super_id)
+                    print(f"Action {action_num}")
                     pos_actions = get_posible_actions_number(
                         movements,
                         reshaped_board,
                         self.current_player.token.symbol,
-                        self.players[
-                            self.current_player_num].has_started,
+                        False,
                         remain_pieces
                     )
-                    print(f"Action  {action_num} gives {pos_actions}")
                     masked_action_probs[action_num] = pos_actions
                 elif action_num == 2200:
                     masked_action_probs[action_num] = 1
