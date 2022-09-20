@@ -184,10 +184,10 @@ def is_legal(movements, action_num, reshaped_board, symbol, has_started, remaini
         return 0
     return 0
 
-def get_posible_actions_number(movements, reshaped_board, symbol, has_started):
+def get_posible_actions_number(movements, reshaped_board, symbol, has_started, remaining_pieces):
     legal_actions = []
     for action_num in range(2201):
-        legal = is_legal(movements, action_num, reshaped_board, symbol, has_started)
+        legal = is_legal(movements, action_num, reshaped_board, symbol, has_started, remaining_pieces)
         legal_actions.append(legal)
 
     if all(item == 0 for item in legal_actions):
