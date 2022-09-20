@@ -137,10 +137,14 @@ class BlokusEnv(gym.Env):
         obs = np.stack([position_1, position_2, position_3, position_4],
                        axis=-1)
         # TODO Agregar mas información (como por ejemplo hotcells)
-        print("legal actions  en observations")
-        legal_actions_r = np.concatenate(
-            (np.array(self.legal_actions_uncached), np.zeros(99))
-        )
+        if not self.legal_actions:
+            legal_actions_r = np.concatenate(
+                (np.array(self.legal_actions_uncached), np.zeros(99))
+            )
+        else:
+            legal_actions_r = np.concatenate(
+                (np.array(self.legal_actions), np.zeros(99))
+            )
         legal_actions_r.resize(10, 10, 23)
 
         out = np.concatenate((obs, legal_actions_r), axis=2)
@@ -156,7 +160,7 @@ class BlokusEnv(gym.Env):
         if all(item == 0 for item in legal_actions):
             legal_actions[2200] = 1
 
-        # self.legal_actions = copy.deepcopy(np.array(legal_actions))
+        self.legal_actions = copy.deepcopy(np.array(legal_actions))
         return np.array(legal_actions)
 
     def is_legal(self, action_num, debug=False):
@@ -383,7 +387,11 @@ class BlokusEnv(gym.Env):
         if not done:
             self.current_player_num = (self.current_player_num + 1) % self.n_players
 
-        return self.observation, reward, done, {}
+        obs = self.observation
+
+        self.legal_actions = None
+
+        return obs, reward, done, {}
 
     def reset(self):
         self.board = [0] * self.num_squares
@@ -428,14 +436,19 @@ class BlokusEnv(gym.Env):
 
         if not self.done:
             print("legal_actions en render")
-            self.legal_actions = copy.deepcopy(self.legal_actions_uncached)
-            legal_actions = [i for i, o in enumerate(self.legal_actions) if o == 1]
+            if self.legal_actions:
+                legal_actions = [i for i, o in enumerate(self.legal_actions) if o == 1]
+            else:
+                legal_actions = [i for i, o in enumerate(self.legal_actions_uncached) if o == 1]
 
             logger.debug(f'\nLegal actions: {legal_actions}')
 
     def rules_move(self):
         movements = all_moves(self.num_squares)
-        actions = self.legal_actions
+        if self.legal_actions:
+            actions = self.legal_actions
+        else:
+            actions = self.legal_actions_uncached
 
         masked_action_probs = copy.deepcopy(actions)
         for action_num in range(self.action_space.n):
