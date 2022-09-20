@@ -61,9 +61,7 @@ def policy_head(y, legal_actions):
     y = convolutional(y, 4, 1)
     y = Flatten()(y)
     policy = dense(y, 2201, batch_norm=False, activation=None, name='pi')
-
     mask = Lambda(lambda x: (1 - x) * -1e8)(legal_actions)
-
     policy = Add()([policy, mask])
     return policy
 
@@ -120,5 +118,6 @@ def dense(y, filters, batch_norm=True, activation='relu', name=None):
 def input_split(processed_obs):
     obs = processed_obs[:, :, :, :4]
     legal_actions = tf.reshape(processed_obs[:, :, :, 4:], [-1])[:2201]
+    legal_actions = tf.reshape(legal_actions, (1, 2201))
     return obs, legal_actions
 
