@@ -77,6 +77,8 @@ def is_legal(movements, action_num, reshaped_board, symbol, has_started, remaini
     movement = movements[action_num]
     square, piece_id, piece_super_id, grid = movement
     x, y = int(square / 10), square % 10
+    if action_num == 243:
+        print(f"Action {action_num}: piece: {piece_super_id}, grid: {grid}")
     if piece_super_id in remaining_pieces:  # El jugador posee la ficha
         for coordinates in grid:  # Chequeo casilla en blanco
             coord_x, coord_y = coordinates
@@ -187,8 +189,7 @@ def is_legal(movements, action_num, reshaped_board, symbol, has_started, remaini
         return 0
     return 0
 
-def get_posible_actions_number(movements, reshaped_board, symbol, has_started, remaining_pieces):
-    legal_actions = []
+def print_board(reshaped_board):
     printable_board = np.array([[y.symbol for y in x] for x in reshaped_board])
     colors = {
         ".": None,
@@ -200,6 +201,10 @@ def get_posible_actions_number(movements, reshaped_board, symbol, has_started, r
     for i in range(0, 10):
         print(
             ' '.join([colored(x, colors[x]) for x in printable_board[i]]))
+
+
+def get_posible_actions_number(movements, reshaped_board, symbol, has_started, remaining_pieces):
+    legal_actions = []
     for action_num in range(2201):
         legal = is_legal(movements, action_num, reshaped_board, symbol, has_started, remaining_pieces)
         legal_actions.append(legal)
