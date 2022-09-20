@@ -225,7 +225,7 @@ def get_posible_actions_number(movements, reshaped_board, symbol, has_started, r
     legal_actions = []
     for action_num in range(2201):
         legal = is_legal(movements, action_num, reshaped_board, symbol, has_started, remaining_pieces)
-        if action_num == "243":
+        if action_num == 243:
             print(f"Legal: {legal}")
         legal_actions.append(legal)
     if all(item == 0 for item in legal_actions):
