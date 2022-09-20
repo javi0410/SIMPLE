@@ -124,6 +124,7 @@ class BlokusEnv(gym.Env):
         self.observation_space = gym.spaces.Box(0, 1, self.grid_shape + (self.n_players + 23,))
         self.verbose = verbose
         self.legal_actions = None
+        self.is_legal_actions_cached = False
 
     @property
     def observation(self):
@@ -138,7 +139,7 @@ class BlokusEnv(gym.Env):
         obs = np.stack([position_1, position_2, position_3, position_4],
                        axis=-1)
         # TODO Agregar mas información (como por ejemplo hotcells)
-        if not self.legal_actions:
+        if not self.is_legal_actions_cached:
             legal_actions_r = np.concatenate(
                 (np.array(self.legal_actions_uncached), np.zeros(99))
             )
@@ -162,6 +163,7 @@ class BlokusEnv(gym.Env):
             legal_actions[2200] = 1
 
         self.legal_actions = copy.deepcopy(np.array(legal_actions))
+        self.is_legal_actions_cached = True
         return np.array(legal_actions)
 
     def is_legal(self, action_num, debug=False):
@@ -391,6 +393,7 @@ class BlokusEnv(gym.Env):
         obs = self.observation
 
         self.legal_actions = None
+        self.is_legal_actions_cached = False
 
         return obs, reward, done, {}
 
@@ -437,7 +440,7 @@ class BlokusEnv(gym.Env):
 
         if not self.done:
             print("legal_actions en render")
-            if self.legal_actions:
+            if self.is_legal_actions_cached:
                 legal_actions = [i for i, o in enumerate(self.legal_actions) if o == 1]
             else:
                 legal_actions = [i for i, o in enumerate(self.legal_actions_uncached) if o == 1]
@@ -446,7 +449,7 @@ class BlokusEnv(gym.Env):
 
     def rules_move(self):
         movements = all_moves(self.num_squares)
-        if self.legal_actions:
+        if self.is_legal_actions_cached:
             actions = self.legal_actions
         else:
             actions = self.legal_actions_uncached
