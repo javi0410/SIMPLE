@@ -34,9 +34,12 @@ class Agent():
     top5_actions = action_probs[top5_action_idx]
     logger.debug(f"Top 5 actions: {[str(i) + ': ' + str(round(a,2))[:5] for i,a in zip(top5_action_idx, top5_actions)]}")
 
-  def choose_action(self, env, choose_best_action, mask_invalid_actions):
+  def choose_action(self, env, choose_best_action, mask_invalid_actions, mode=None):
       if self.name == 'rules':
-        action_probs = np.array(env.rules_move())
+        if not mode:
+            action_probs = np.array(env.rules_move())
+        else:
+            action_probs = np.array(env.rules_move(mode=mode))
         value = None
       else:
         action_probs = self.model.action_probability(env.observation)

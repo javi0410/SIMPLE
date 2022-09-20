@@ -90,7 +90,7 @@ def main(args):
       if args.recommend and current_player.name in ['human', 'rules']:
         # show recommendation from last loaded model
         logger.debug(f'\nRecommendation by {ppo_agent.name}:')
-        action = ppo_agent.choose_action(env, choose_best_action = True, mask_invalid_actions = True)
+        action = ppo_agent.choose_action(env, choose_best_action = True, mask_invalid_actions = True, mode=args.rules_mode)
 
       if current_player.name == 'human':
         action = input('\nPlease choose an action: ')
@@ -102,7 +102,7 @@ def main(args):
           action = eval(action)
       elif current_player.name == 'rules':
         logger.debug(f'\n{current_player.name} model choices')
-        action = current_player.choose_action(env, choose_best_action = False, mask_invalid_actions = True)
+        action = current_player.choose_action(env, choose_best_action = False, mask_invalid_actions = True, mode=args.rules_mode)
       else:
         logger.debug(f'\n{current_player.name} model choices')
         action = current_player.choose_action(env, choose_best_action = args.best, mask_invalid_actions = True)
@@ -167,6 +167,8 @@ def cli() -> None:
             , help="Random seed")
   parser.add_argument("--results_file", "-rf", type=str, default='results.csv'
                       , help="File to store results")
+  parser.add_argument("--rules_mode", "-rm", type=str, default=None
+                      , help="rules mode")
 
   # Extract args
   args = parser.parse_args()
