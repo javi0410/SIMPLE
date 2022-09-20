@@ -421,7 +421,7 @@ class BlokusEnv(gym.Env):
                         coord_x, coord_y = coordinates
                         reshaped_board[x + coord_x][
                             y + coord_y] = self.current_player.token
-                    remain_pieces = copy.deepcopy(piece_super_id in self.players[
+                    remain_pieces = copy.deepcopy(self.players[
                             self.current_player_num].super_id_pieces)
                     remain_pieces.remove(piece_super_id)
                     pos_actions = get_posible_actions_number(
