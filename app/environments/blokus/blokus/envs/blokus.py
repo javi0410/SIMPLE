@@ -2,7 +2,7 @@ import gym
 import copy
 import numpy as np
 from blokus.envs.constants import simple_pieces
-from blokus.envs.rules import get_hot_cells_number, get_posible_actions_number
+from blokus.envs.rules import get_hot_cells_number, get_posible_actions_number, greedy_score
 from termcolor import colored
 from stable_baselines import logger
 
@@ -435,6 +435,26 @@ class BlokusEnv(gym.Env):
                         remain_pieces
                     )
                     masked_action_probs[action_num] = pos_actions
+                elif action_num == 2200:
+                    masked_action_probs[action_num] = 1
+                else:
+                    masked_action_probs[action_num] = 0
+
+        elif mode == "greedy":
+            for action_num in range(self.action_space.n):
+                if actions[action_num] == 1 and action_num != 2200:
+                    reshaped_board = copy.deepcopy(
+                        np.array(self.board).reshape(self.grid_shape))
+                    score = greedy_score(
+                        movements,
+                        action_num,
+                        reshaped_board,
+                        self.players,
+                        self.current_player_num,
+                        1,
+                        2
+                    )
+                    masked_action_probs[action_num] = score
                 elif action_num == 2200:
                     masked_action_probs[action_num] = 1
                 else:

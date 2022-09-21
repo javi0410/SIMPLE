@@ -21,15 +21,6 @@ from stable_baselines import logger
 
 
 def write_results(players, game, games, episode_length, results_file):
-    
-    out = {'game': game
-    , 'games': games
-    , 'episode_length': episode_length
-    , 'p1': players[0].name
-    , 'p2': players[1].name
-    , 'p1_points': players[0].points
-    , 'p2_points': np.sum([x.points for x in players[1:]])
-    }
 
     out = {'game': game
     , 'games': games
@@ -111,6 +102,7 @@ def get_best_model_name(env_name):
         
     return filename
 
+
 def get_model_stats(filename):
     if filename is None:
         generation = 0
@@ -143,6 +135,7 @@ def reset_logs(model_dir):
     except Exception as e :
         print(e)
         print('Reset logs failed')
+
 
 def reset_models(model_dir):
     try:
