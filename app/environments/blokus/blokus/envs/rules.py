@@ -224,7 +224,82 @@ def get_posible_actions_number(movements, reshaped_board, symbol, has_started,
 
     return sum(legal_actions)
 
+def put_piece_in_board(movements, board, player, action_num):
+    reshaped_board = copy.deepcopy(board)
+    movement = movements[action_num]
+    square, piece_id, piece_super_id, grid = movement
+    x, y = int(square / 10), square % 10
 
+    for coordinates in grid:
+        coord_x, coord_y = coordinates
+        reshaped_board[x + coord_x][
+            y + coord_y] = player.token
+    remaining_pieces = copy.deepcopy(player.super_id_pieces)
+    remaining_pieces.remove(piece_super_id)
+
+    return reshaped_board, remaining_pieces
+
+def has_started(board, symbol):
+    for x in board:
+        for y in x:
+            if y.symbol == symbol:
+                return True
+    return False
+
+def score_actions(movements, new_board, player, player_has_started, player_rem_pieces):
+    p_legal_actions = get_posible_actions(movements, new_board, player.symbol,
+                                           player_has_started, player_rem_pieces)
+
+    for act_p1, leg in enumerate(p_legal_actions):
+        if leg == 1:
+            board_p, rem_pieces_p = put_piece_in_board(movements, new_board,
+                                                         player, act_p1)
+            n = get_posible_actions_number(movements, board_p, player.symbol, True,
+                                           rem_pieces_p)
+            p_legal_actions[act_p1] = n
+            del board_p, rem_pieces_p
+
+    return p_legal_actions
+
+def get_possible_actions_score(movements, action_num, board, current_player_num, players, best_cut=5):
+    players_order = [
+        current_player_num,
+        (current_player_num + 1) % 4,
+        (current_player_num + 2) % 4,
+        (current_player_num + 3) % 4,
+    ]
+    # Current player
+    board_p0, remaining_pieces_p0 = put_piece_in_board(movements, board, players[current_player_num], action_num)
+
+    score = 0
+    #next player p1
+    p1 = players[players_order[1]]
+    p1_legal_actions= score_actions(movements, board_p0, p1)
+
+    best_p1 = sorted(range(len(p1_legal_actions)), key=lambda i: p1_legal_actions[i])[-best_cut:]
+
+    for play_p1 in best_p1:
+        # next player p2
+        p2 = players[players_order[2]]
+        board_p1, remaining_pieces_p1 = put_piece_in_board(movements, board_p0, p1, play_p1)
+        p2_legal_actions = score_actions(movements, board_p1, p2)
+
+        best_p2 = sorted(range(len(p2_legal_actions)),
+                         key=lambda i: p2_legal_actions[i])[-best_cut:]
+
+        for play_p2 in best_p2:
+            # next player p3
+            p3 = players[players_order[3]]
+            board_p2, remaining_pieces_p2 = put_piece_in_board(movements, board_p1, p2, play_p2)
+            p3_legal_actions = score_actions(movements, board_p2, p3)
+
+            best_p3 = sorted(range(len(p3_legal_actions)),
+                             key=lambda i: p3_legal_actions[i])[-best_cut:]
+
+            for play_p3 in best_p3:
+                p0 = players[players_order[0]]
+                board_p3, remaining_pieces_p3 = put_piece_in_board(movements, board_p2, p3, play_p3)
+                p0_legal_actions = score_actions(movements, board_p3, p0)
 
 
 
