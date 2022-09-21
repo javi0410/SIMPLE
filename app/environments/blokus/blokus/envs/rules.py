@@ -273,16 +273,16 @@ def greedy_score(movements, action_num, board, players, current_player_num, w0, 
     square, piece_id, piece_super_id, grid = movements[action_num]
     size = len(grid)
     p0 = get_posible_actions_number(movements, new_board, player.token.symbol, True, remaining_pieces)
-    p1 = get_posible_actions_number(movements, new_board, other_players[1].token.symbol, True,
-                                    other_players[1].super_id_pieces)
+    p1 = get_posible_actions_number(movements, new_board, players[other_players[1]].token.symbol, True,
+                                    players[other_players[1]].super_id_pieces)
     p2 = get_posible_actions_number(movements, new_board,
-                                    other_players[2].token.symbol, True,
-                                    other_players[2].super_id_pieces)
+                                    players[other_players[2]].token.symbol, True,
+                                    players[other_players[2]].super_id_pieces)
     p3 = get_posible_actions_number(movements, new_board,
-                                    other_players[3].token.symbol, True,
-                                    other_players[3].super_id_pieces)
+                                    players[other_players[3]].token.symbol, True,
+                                    players[other_players[3]].super_id_pieces)
 
-    score = w0*size + w1*(p0)-(sum([p1, p2, p3])/3)
+    score = w0*size + w1*(p0-sum([p1, p2, p3])/3)
     return score
 
 
