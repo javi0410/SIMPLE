@@ -47,7 +47,7 @@ def is_hot_cell(reshaped_board, x, y, player_symbol):
         pass
     try:
         if (y - 1) >= 0 and \
-                reshaped_board[x+ 1][y - 1].symbol == player_symbol:
+                reshaped_board[x + 1][y - 1].symbol == player_symbol:
             return True
     except:
         pass
@@ -71,14 +71,13 @@ def get_hot_cells_number(reshaped_board, player_symbol):
     return hot_cells
 
 
-def is_legal(movements, action_num, reshaped_board, symbol, has_started, remaining_pieces):
+def is_legal(movements, action_num, reshaped_board, symbol, has_started,
+             remaining_pieces):
     if action_num == 2200:
         return 0
     movement = movements[action_num]
     square, piece_id, piece_super_id, grid = movement
     x, y = int(square / 10), square % 10
-    if action_num == 243:
-        print(f"Action {action_num}: piece: {piece_super_id}, grid: {grid}, ini : ({x}, {y})")
     if piece_super_id in remaining_pieces:  # El jugador posee la ficha
         for coordinates in grid:  # Chequeo casilla en blanco
             coord_x, coord_y = coordinates
@@ -86,16 +85,10 @@ def is_legal(movements, action_num, reshaped_board, symbol, has_started, remaini
                 if (x + coord_x) < 0 or (y + coord_y) < 0 or (
                         x + coord_x) >= 10 or (
                         y + coord_y) >= 10:
-                    if action_num == 243:
-                        print(1)
                     return 0
                 if reshaped_board[x + coord_x][y + coord_y].number != 0:
-                    if action_num == 243:
-                        print(2)
                     return 0
             except:
-                if action_num == 243:
-                    print(3)
                 return 0
         for coordinates in grid:  # Chequeo adyacentes diferentes al color del jugador
             coord_x, coord_y = coordinates
@@ -109,8 +102,6 @@ def is_legal(movements, action_num, reshaped_board, symbol, has_started, remaini
             else:
                 if reshaped_board[x + coord_x + 1][
                     y + coord_y].symbol == symbol:
-                    if action_num == 243:
-                        print(4)
                     return 0
             """
             CASILLA DE ARRIBA
@@ -122,8 +113,6 @@ def is_legal(movements, action_num, reshaped_board, symbol, has_started, remaini
             else:
                 if reshaped_board[x + coord_x - 1][
                     y + coord_y].symbol == symbol:
-                    if action_num == 243:
-                        print(5)
                     return 0
 
             """
@@ -136,8 +125,6 @@ def is_legal(movements, action_num, reshaped_board, symbol, has_started, remaini
             else:
                 if reshaped_board[x + coord_x][
                     y + coord_y + 1].symbol == symbol:
-                    if action_num == 243:
-                        print(6)
                     return 0
 
             """
@@ -150,8 +137,6 @@ def is_legal(movements, action_num, reshaped_board, symbol, has_started, remaini
             else:
                 if reshaped_board[x + coord_x][
                     y + coord_y - 1].symbol == symbol:
-                    if action_num == 243:
-                        print(7)
                     return 0
 
         if not has_started:  # Primera pieza que coloca el jugador
@@ -200,12 +185,9 @@ def is_legal(movements, action_num, reshaped_board, symbol, has_started, remaini
             except:
                 pass
     else:
-        if action_num == 243:
-            print(8)
         return 0
-    if action_num == 243:
-        print(9)
     return 0
+
 
 def print_board(reshaped_board):
     printable_board = np.array([[y.symbol for y in x] for x in reshaped_board])
@@ -221,15 +203,14 @@ def print_board(reshaped_board):
             ' '.join([colored(x, colors[x]) for x in printable_board[i]]))
 
 
-def get_posible_actions_number(movements, reshaped_board, symbol, has_started, remaining_pieces):
+def get_posible_actions_number(movements, reshaped_board, symbol, has_started,
+                               remaining_pieces):
     legal_actions = []
     for action_num in range(2201):
-        legal = is_legal(movements, action_num, reshaped_board, symbol, has_started, remaining_pieces)
-        if action_num == 243:
-            print(f"Legal: {legal}")
+        legal = is_legal(movements, action_num, reshaped_board, symbol,
+                         has_started, remaining_pieces)
         legal_actions.append(legal)
     if all(item == 0 for item in legal_actions):
         legal_actions[2200] = 1
 
     return sum(legal_actions)
-
