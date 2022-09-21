@@ -14,9 +14,13 @@ def sample_action(action_probs):
 
 
 def mask_actions(legal_actions, action_probs):
-    masked_action_probs = np.multiply(legal_actions, action_probs)
-    masked_action_probs = masked_action_probs / np.sum(masked_action_probs)
-    return masked_action_probs
+    try:
+        masked_action_probs = np.multiply(legal_actions, action_probs)
+        masked_action_probs = masked_action_probs / np.sum(masked_action_probs)
+        return masked_action_probs
+    except:
+        print(f"Legal actions: {sum(legal_actions)}")
+        raise Exception("Error while masking actions")
 
 
 
