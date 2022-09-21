@@ -382,6 +382,7 @@ class BlokusEnv(gym.Env):
 
         if "mode" in kwargs.keys():
             mode = kwargs["mode"]
+            print(f"USING MODE {mode}")
         else:
             mode = "n_hot_cells"
 
