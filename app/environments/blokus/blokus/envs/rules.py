@@ -70,7 +70,7 @@ def get_hot_cells_number(reshaped_board, player_symbol):
             if is_hot_cell(reshaped_board, x, y, player_symbol):
                 hot_cells += 1
 
-    return hot_cells
+    return max(hot_cells, 1)
 
 
 def is_legal(movements, action_num, reshaped_board, symbol, has_started,
