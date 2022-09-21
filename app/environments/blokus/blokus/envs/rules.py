@@ -1,5 +1,7 @@
 import numpy as np
 from termcolor import colored
+import copy
+import sys
 
 
 def has_adyacent_occupied_cells(reshaped_board, x, y, player_symbol):
@@ -203,7 +205,7 @@ def print_board(reshaped_board):
             ' '.join([colored(x, colors[x]) for x in printable_board[i]]))
 
 
-def get_posible_actions_number(movements, reshaped_board, symbol, has_started,
+def get_posible_actions(movements, reshaped_board, symbol, has_started,
                                remaining_pieces):
     legal_actions = []
     for action_num in range(2201):
@@ -212,5 +214,24 @@ def get_posible_actions_number(movements, reshaped_board, symbol, has_started,
         legal_actions.append(legal)
     if all(item == 0 for item in legal_actions):
         legal_actions[2200] = 1
+    return legal_actions
+
+
+def get_posible_actions_number(movements, reshaped_board, symbol, has_started,
+                               remaining_pieces):
+    legal_actions = get_posible_actions(movements, reshaped_board, symbol, has_started,
+                        remaining_pieces)
 
     return sum(legal_actions)
+
+
+
+
+
+
+
+
+
+
+
+

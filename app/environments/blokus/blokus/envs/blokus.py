@@ -334,6 +334,7 @@ class BlokusEnv(gym.Env):
         self.board = [0] * self.num_squares
         self.board = [Token('.', 0)] * self.num_squares
 
+
         super_id_pieces = [i for i in range(10)]
         self.players = [Player(0, Token('b', 1), copy.deepcopy(super_id_pieces)),
                         Player(1, Token('g', 2), copy.deepcopy(super_id_pieces)),
@@ -341,6 +342,8 @@ class BlokusEnv(gym.Env):
                         Player(3, Token('y', 4), copy.deepcopy(super_id_pieces))]
         self.current_player_num = 0
         self.turns_taken = 0
+        self.legal_actions_cached = None
+        self.is_legal_actions_cached = False
         self.done = False
         logger.debug(f'\n\n---- NEW GAME ----')
         return self.observation
@@ -443,4 +446,3 @@ class BlokusEnv(gym.Env):
             else:
                 masked_action_probs = [a / sum(actions) for a in actions]
             return masked_action_probs
-
