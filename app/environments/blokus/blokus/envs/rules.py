@@ -282,7 +282,7 @@ def greedy_score(movements, action_num, board, players, current_player_num, w0, 
                                     players[other_players[2]].token.symbol, True,
                                     players[other_players[2]].super_id_pieces)
 
-    score = max((w0*size + w1*(p0-sum([p1, p2, p3])/3), 0.0001))
+    score = max((w0*size + w1*(p0-sum([p1, p2, p3])/3), 1))
     return score
 
 
