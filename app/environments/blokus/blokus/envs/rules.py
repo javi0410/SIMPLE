@@ -272,6 +272,10 @@ def greedy_score(movements, action_num, board, players, current_player_num, w0, 
     ]
     square, piece_id, piece_super_id, grid = movements[action_num]
     size = len(grid)
+    if w1 == 0:
+        del new_board, remaining_pieces
+        return w0*size
+
     p0 = get_posible_actions_number(movements, new_board, player.token.symbol, True, remaining_pieces)
     p1 = get_posible_actions_number(movements, new_board, players[other_players[0]].token.symbol, True,
                                     players[other_players[0]].super_id_pieces)
@@ -297,7 +301,6 @@ def get_minmax_score(movements, action_num, board, current_player_num, players, 
     # Current player
     new_board, remaining_pieces_p0 = put_piece_in_board(movements, board, player, action_num)
     for opp in oponents:
-        print(f"Oponente {opp.id}")
         # create an empty list to store evaluations of possible moves
         final_moves_op = {}
         poss_opp = get_posible_actions(movements, new_board, opp.token.symbol,

@@ -330,7 +330,6 @@ class BlokusEnv(gym.Env):
         return self.observation, reward, done, {}
 
     def reset(self):
-        print("Iniciando partida")
         self.board = [0] * self.num_squares
         self.board = [Token('.', 0)] * self.num_squares
 
@@ -382,9 +381,8 @@ class BlokusEnv(gym.Env):
 
         if "mode" in kwargs.keys():
             mode = kwargs["mode"]
-            print(f"USING MODE {mode}")
         else:
-            mode = "n_hot_cells"
+            mode = "greedy_1_0"
 
         if mode == "n_hot_cells":
 
@@ -472,6 +470,11 @@ class BlokusEnv(gym.Env):
             return masked_action_probs
 
         elif "minmax" in mode:
+            # w0 : peso del tamaño de la pieza
+            # w1 : peso del numero posible de acciones
+            # w2 : numero de jugadas que se escogen para profundizar
+            # w3 : peso de la primera jugada
+            # w4 : peso de la segunda jugada
             mode_weights = [int(w) for w in mode.split("_")[1:]]
             scores_p0 = copy.deepcopy(masked_action_probs)
             for action_num in range(self.action_space.n):
@@ -500,7 +503,6 @@ class BlokusEnv(gym.Env):
                 if actions[p] == 1:
                     best_plays.append(p)
             for action_num in best_plays:
-                print(f"Evaluando accion {action_num}")
                 score = get_minmax_score(movements, action_num, reshaped_board, self.current_player_num, self.players, mode_weights)
                 score = mode_weights[3]*score + mode_weights[4] * scores_p0[action_num]
                 if actions[action_num] == 1 and action_num != 2200:
