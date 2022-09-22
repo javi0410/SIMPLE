@@ -94,7 +94,7 @@ def main(args):
       env.render()
       logger.debug(f'\nCurrent player name: {current_player.name}')
 
-      if args.recommend and current_player.name in ['human', 'rules']:
+      if args.recommend and (current_player.name == 'human' or 'rules' in current_player.name) :
         # show recommendation from last loaded model
         logger.debug(f'\nRecommendation by {ppo_agent.name}:')
         action = ppo_agent.choose_action(env, choose_best_action = True, mask_invalid_actions = True)
@@ -107,7 +107,7 @@ def main(args):
         except:
           # for MulitDiscrete action input as list TODO
           action = eval(action)
-      elif current_player.name == 'rules':
+      elif 'rules' in current_player.name:
         logger.debug(f'\n{current_player.name} model choices')
         action = current_player.choose_action(env, choose_best_action = False, mask_invalid_actions = True)
       else:
