@@ -441,7 +441,10 @@ class BlokusEnv(gym.Env):
                 else:
                     masked_action_probs[action_num] = 0
 
-        elif mode == "greedy":
+        elif "greedy" in mode:
+            mode_weights = mode.split("_")
+            w0 = mode_weights[1]
+            w1 = mode_weights[2]
             for action_num in range(self.action_space.n):
                 if actions[action_num] == 1 and action_num != 2200:
                     reshaped_board = copy.deepcopy(
@@ -452,8 +455,8 @@ class BlokusEnv(gym.Env):
                         reshaped_board,
                         self.players,
                         self.current_player_num,
-                        1,
-                        2
+                        w0,
+                        w1
                     )
                     masked_action_probs[action_num] = score
                 elif action_num == 2200:
