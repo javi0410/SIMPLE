@@ -500,6 +500,7 @@ class BlokusEnv(gym.Env):
                 if actions[p] == 1:
                     best_plays.append(p)
             for action_num in best_plays:
+                print(f"Evaluando accion {action_num}")
                 score = get_minmax_score(movements, action_num, reshaped_board, self.current_player_num, self.players, mode_weights)
                 score = mode_weights[3]*score + mode_weights[4] * scores_p0[action_num]
                 if actions[action_num] == 1 and action_num != 2200:
