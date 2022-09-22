@@ -472,7 +472,7 @@ class BlokusEnv(gym.Env):
             return masked_action_probs
 
         elif "minmax" in mode:
-            mode_weights = mode.split("_")[1:]
+            mode_weights = [int(w) for w in mode.split("_")[1:]]
             scores_p0 = copy.deepcopy(masked_action_probs)
             for action_num in range(self.action_space.n):
                 if actions[action_num] == 1 and action_num != 2200:
