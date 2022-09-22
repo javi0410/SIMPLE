@@ -443,8 +443,8 @@ class BlokusEnv(gym.Env):
 
         elif "greedy" in mode:
             mode_weights = mode.split("_")
-            w0 = mode_weights[1]
-            w1 = mode_weights[2]
+            w0 = int(mode_weights[1])
+            w1 = int(mode_weights[2])
             for action_num in range(self.action_space.n):
                 if actions[action_num] == 1 and action_num != 2200:
                     reshaped_board = copy.deepcopy(
