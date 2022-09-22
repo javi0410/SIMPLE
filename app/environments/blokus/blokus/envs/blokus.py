@@ -2,7 +2,7 @@ import gym
 import copy
 import numpy as np
 from blokus.envs.constants import simple_pieces
-from blokus.envs.rules import get_hot_cells_number, get_posible_actions_number, greedy_score
+from blokus.envs.rules import get_hot_cells_number, get_posible_actions_number, greedy_score, get_minmax_score
 from termcolor import colored
 from stable_baselines import logger
 
@@ -401,7 +401,7 @@ class BlokusEnv(gym.Env):
                             y + coord_y] = self.current_player.token
                     hot_cells = get_hot_cells_number(reshaped_board, self.current_player.token.symbol)
                     masked_action_probs[action_num] = hot_cells
-                elif action_num == 2200:
+                elif action_num == 2200 and actions[action_num] == 1:
                     masked_action_probs[action_num] = 1
                 else:
                     masked_action_probs[action_num] = 0
@@ -436,7 +436,7 @@ class BlokusEnv(gym.Env):
                         remain_pieces
                     )
                     masked_action_probs[action_num] = pos_actions
-                elif action_num == 2200:
+                elif action_num == 2200 and actions[action_num] == 1:
                     masked_action_probs[action_num] = 1
                 else:
                     masked_action_probs[action_num] = 0
@@ -459,7 +459,7 @@ class BlokusEnv(gym.Env):
                         w1
                     )
                     masked_action_probs[action_num] = score
-                elif action_num == 2200:
+                elif action_num == 2200 and actions[action_num] == 1:
                     masked_action_probs[action_num] = 1
                 else:
                     masked_action_probs[action_num] = 0
@@ -470,3 +470,53 @@ class BlokusEnv(gym.Env):
             else:
                 masked_action_probs = [a / sum(actions) for a in actions]
             return masked_action_probs
+
+        elif "minmax" in mode:
+            mode_weights = mode.split("_")[1:]
+            scores_p0 = copy.deepcopy(masked_action_probs)
+            for action_num in range(self.action_space.n):
+                if actions[action_num] == 1 and action_num != 2200:
+                    reshaped_board = copy.deepcopy(
+                        np.array(self.board).reshape(self.grid_shape))
+                    score = greedy_score(
+                        movements,
+                        action_num,
+                        reshaped_board,
+                        self.players,
+                        self.current_player_num,
+                        mode_weights[0],
+                        mode_weights[1]
+                    )
+                    scores_p0[action_num] = score
+
+                elif action_num == 2200 and actions[action_num] == 1:
+                    scores_p0[action_num] = 1
+                else:
+                    scores_p0[action_num] = 0
+            best_plays_p0 = sorted(range(len(scores_p0)),
+                                   key=lambda i: scores_p0[i])[-mode_weights[2]:]
+            best_plays = []
+            for p in best_plays_p0:
+                if actions[p] == 1:
+                    best_plays.append(p)
+            for action_num in best_plays:
+                score = get_minmax_score(movements, action_num, reshaped_board, self.current_player_num, self.players, mode_weights)
+                score = mode_weights[3]*score + mode_weights[4] * scores_p0[action_num]
+                if actions[action_num] == 1 and action_num != 2200:
+                    masked_action_probs[action_num] = score
+                elif action_num == 2200 and actions[action_num] == 1:
+                    masked_action_probs[action_num] = 1
+                else:
+                    masked_action_probs[action_num] = 0
+
+            s = sum(masked_action_probs)
+            if s != 0:
+                masked_action_probs = [a / s for a in masked_action_probs]
+            else:
+                masked_action_probs = [a / sum(actions) for a in actions]
+            return masked_action_probs
+
+
+
+
+

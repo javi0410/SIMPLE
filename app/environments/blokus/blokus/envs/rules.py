@@ -283,55 +283,72 @@ def greedy_score(movements, action_num, board, players, current_player_num, w0, 
                                     players[other_players[2]].super_id_pieces)
 
     score = max((w0*size + w1*(p0-sum([p1, p2, p3])/3), 1))
+    del new_board, remaining_pieces
     return score
 
 
-def get_possible_actions_score(movements, action_num, board, current_player_num, players, best_cut=5):
-    players_order = [
-        current_player_num,
-        (current_player_num + 1) % 4,
-        (current_player_num + 2) % 4,
-        (current_player_num + 3) % 4,
+def get_minmax_score(movements, action_num, board, current_player_num, players, weights=[], best_cut=5):
+    oponents = [
+        players[(current_player_num + 1) % 4],
+        players[(current_player_num + 2) % 4],
+        players[(current_player_num + 3) % 4],
     ]
-    scores = []
+    player = players[current_player_num]
     # Current player
-    board_p0, remaining_pieces_p0 = put_piece_in_board(movements, board, players[current_player_num], action_num)
+    new_board, remaining_pieces_p0 = put_piece_in_board(movements, board, player, action_num)
+    for opp in oponents:
+        # create an empty list to store evaluations of possible moves
+        final_moves_op = {}
+        poss_opp = get_posible_actions(movements, new_board, opp.token.symbol,
+                                      opp.has_started, opp.super_id_pieces)
+        # evaluate every possible move; store in final_moves_op
+        for poss, legal in enumerate(poss_opp):
+            if legal == 1:
+                score = greedy_score(
+                    movements,
+                    action_num,
+                    new_board,
+                    players,
+                    opp.id,
+                    weights[0],
+                    weights[1]
+                )
+                final_moves_op[poss] = score
+        # take the highest scoring move
+        if not final_moves_op:
+            continue
+        best_move = max(final_moves_op.keys(), key=(lambda key: final_moves_op[key]))
+        # update the board with the highest scoring move
+        new_board, remaining_pieces_p0 = put_piece_in_board(movements, new_board, opp, best_move)
 
-    score = 0
-    #next player p1
-    p1 = players[players_order[1]]
-    p1_legal_actions= score_actions(movements, board_p0, p1)
+    # BOARD HAS BEEN UPDATED; OPPONENTS HAVE FINISHED THEIR TURNS
+    possibles_2 = get_posible_actions(movements, new_board, player.token.symbol,
+                                      True, remaining_pieces_p0)
+    # if there are possible moves left:
+    final_moves_2 = {}
+    # evaluate each move; append to list of tuples (piece, score)
+    for possible, leg in enumerate(possibles_2):
+        if leg == 1:
+            score = greedy_score(
+                movements,
+                possible,
+                new_board,
+                players,
+                current_player_num,
+                weights[0],
+                weights[1]
+            )
+            final_moves_2[poss] = score
+    # create a list of tuples (piece, score), sorted by score
+    by_score_2 = sorted(final_moves_2, key=lambda move: final_moves_2[move],
+                        reverse=True)
+    if len(by_score_2) >= weights[2]:
+        best = by_score_2[:weights[2]]
+    else:
+        best = by_score_2
 
-    best_p1 = sorted(range(len(p1_legal_actions)), key=lambda i: p1_legal_actions[i])[-best_cut:]
+    return sum([final_moves_2[p] for p in best])/len(best)
 
-    for play_p1 in best_p1:
-        # next player p2
-        if p1_legal_actions[play_p1] != 0:
-            p2 = players[players_order[2]]
-            board_p1, remaining_pieces_p1 = put_piece_in_board(movements, board_p0, p1, play_p1)
-            p2_legal_actions = score_actions(movements, board_p1, p2)
-
-            best_p2 = sorted(range(len(p2_legal_actions)),
-                             key=lambda i: p2_legal_actions[i])[-best_cut:]
-
-            for play_p2 in best_p2:
-                # next player p3
-                if p2_legal_actions[play_p2] != 0:
-                    p3 = players[players_order[3]]
-                    board_p2, remaining_pieces_p2 = put_piece_in_board(movements, board_p1, p2, play_p2)
-                    p3_legal_actions = score_actions(movements, board_p2, p3)
-
-                    best_p3 = sorted(range(len(p3_legal_actions)),
-                                     key=lambda i: p3_legal_actions[i])[-best_cut:]
-
-
-
-                    for play_p3 in best_p3:
-                        #player 0 again
-                        if p3_legal_actions[play_p3] != 0:
-                            p0 = players[players_order[0]]
-                            board_p3, remaining_pieces_p3 = put_piece_in_board(movements, board_p2, p3, play_p3)
-                            p0_legal_actions = score_actions(movements, board_p3, p0)
 
 
 
