@@ -53,11 +53,18 @@ def main(args):
   if len(args.agents) != env.n_players:
     raise Exception(f'{len(args.agents)} players specified but this is a {env.n_players} player game!')
 
+  modes = {
+    0: args.rules_mode_1,
+    1: args.rules_mode_2,
+    2: args.rules_mode_3,
+    3: args.rules_mode_4
+  }
+
   for i, agent in enumerate(args.agents):
     if agent == 'human':
       agent_obj = Agent('human')
     elif agent == 'rules':
-      agent_obj = Agent('rules')
+      agent_obj = Agent('rules', rules_mode = modes[i])
     elif agent == 'base':
       base_model = load_model(env, 'base.zip')
       agent_obj = Agent('base', base_model)   
@@ -90,13 +97,7 @@ def main(args):
       if args.recommend and current_player.name in ['human', 'rules']:
         # show recommendation from last loaded model
         logger.debug(f'\nRecommendation by {ppo_agent.name}:')
-        modes = {
-          0: args.rules_mode_1,
-          1: args.rules_mode_2,
-          2: args.rules_mode_3,
-          3: args.rules_mode_4
-        }
-        action = ppo_agent.choose_action(env, choose_best_action = True, mask_invalid_actions = True, modes=modes)
+        action = ppo_agent.choose_action(env, choose_best_action = True, mask_invalid_actions = True)
 
       if current_player.name == 'human':
         action = input('\nPlease choose an action: ')
@@ -107,14 +108,8 @@ def main(args):
           # for MulitDiscrete action input as list TODO
           action = eval(action)
       elif current_player.name == 'rules':
-        modes = {
-          0: args.rules_mode_1,
-          1: args.rules_mode_2,
-          2: args.rules_mode_3,
-          3: args.rules_mode_4
-        }
         logger.debug(f'\n{current_player.name} model choices')
-        action = current_player.choose_action(env, choose_best_action = False, mask_invalid_actions = True, modes=modes)
+        action = current_player.choose_action(env, choose_best_action = False, mask_invalid_actions = True)
       else:
         logger.debug(f'\n{current_player.name} model choices')
         action = current_player.choose_action(env, choose_best_action = args.best, mask_invalid_actions = True)

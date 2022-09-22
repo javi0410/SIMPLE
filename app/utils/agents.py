@@ -23,25 +23,24 @@ def mask_actions(legal_actions, action_probs):
 
 
 class Agent():
-  def __init__(self, name, model = None):
+  def __init__(self, name, model = None, rules_mode = None):
       self.name = name
+      if rules_mode:
+          self.name = self.name + "_" + rules_mode
       self.id = self.name + '_' + ''.join(random.choice(string.ascii_lowercase) for x in range(5))
       self.model = model
       self.points = 0
+      self.rules_mode = rules_mode
 
   def print_top_actions(self, action_probs):
     top5_action_idx = np.argsort(-action_probs)[:5]
     top5_actions = action_probs[top5_action_idx]
     logger.debug(f"Top 5 actions: {[str(i) + ': ' + str(round(a,2))[:5] for i,a in zip(top5_action_idx, top5_actions)]}")
 
-  def choose_action(self, env, choose_best_action, mask_invalid_actions, modes=None):
+  def choose_action(self, env, choose_best_action, mask_invalid_actions):
       if self.name == 'rules':
         player_num = env.current_player_num
-        try:
-            mode = modes[player_num]
-        except:
-            mode = None
-        action_probs = np.array(env.rules_move(mode=mode))
+        action_probs = np.array(env.rules_move(mode=self.rules_mode))
         value = None
       else:
         action_probs = self.model.action_probability(env.observation)
