@@ -299,6 +299,7 @@ def get_minmax_score(movements, action_num, board, current_player_num, remaining
                     new_board,
                     players,
                     opp.id,
+                    opp.super_id_pieces,
                     weights[0],
                     weights[1]
                 )
