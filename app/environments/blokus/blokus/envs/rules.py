@@ -208,10 +208,11 @@ def print_board(reshaped_board):
 def get_posible_actions(movements, reshaped_board, symbol, has_started,
                                remaining_pieces):
     legal_actions = []
-    for action_num in range(2201):
+    for action_num in range(2200):
         legal = is_legal(movements, action_num, reshaped_board, symbol,
                          has_started, remaining_pieces)
         legal_actions.append(legal)
+    legal_actions.append(0)
     if all(item == 0 for item in legal_actions):
         legal_actions[2200] = 1
     return legal_actions
@@ -249,6 +250,8 @@ def has_started(board, symbol):
 
 def greedy_score(movements, action_num, board, players, current_player_num, remaining_pieces_0, w0, w1):
     player = players[current_player_num]
+    if action_num == 2200:
+        return 1
     new_board, remaining_pieces = put_piece_in_board(movements, board, player, action_num, remaining_pieces_0)
     other_players = [
         (current_player_num + 1) % 4,
