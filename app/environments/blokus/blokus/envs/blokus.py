@@ -388,10 +388,10 @@ class BlokusEnv(gym.Env):
             mode = "greedy_1_0"
 
         if mode == "n_hot_cells":
-
+            reshaped_board = copy.deepcopy(
+                np.array(self.board).reshape(self.grid_shape))
             for action_num in range(self.action_space.n):
                 if actions[action_num] == 1 and action_num != 2200:
-                    reshaped_board = copy.deepcopy(np.array(self.board).reshape(self.grid_shape))
                     movement = movements[action_num]
                     square, piece_id, piece_super_id, grid = movement
                     x, y = int(square / self.rows), square % self.cols
@@ -415,9 +415,10 @@ class BlokusEnv(gym.Env):
             return masked_action_probs
 
         elif mode == "n_possible_actions":
+            reshaped_board = copy.deepcopy(
+                np.array(self.board).reshape(self.grid_shape))
             for action_num in range(self.action_space.n):
                 if actions[action_num] == 1 and action_num != 2200:
-                    reshaped_board = copy.deepcopy(np.array(self.board).reshape(self.grid_shape))
                     movement = movements[action_num]
                     square, piece_id, piece_super_id, grid = movement
                     x, y = int(square / self.rows), square % self.cols
@@ -446,10 +447,11 @@ class BlokusEnv(gym.Env):
             mode_weights = mode.split("_")
             w0 = int(mode_weights[1])
             w1 = int(mode_weights[2])
+            reshaped_board = copy.deepcopy(
+                np.array(self.board).reshape(self.grid_shape))
             for action_num in range(self.action_space.n):
                 if actions[action_num] == 1 and action_num != 2200:
-                    reshaped_board = copy.deepcopy(
-                        np.array(self.board).reshape(self.grid_shape))
+
                     score = greedy_score(
                         movements,
                         action_num,
@@ -481,10 +483,10 @@ class BlokusEnv(gym.Env):
             # w4 : peso de la segunda jugada
             mode_weights = [int(w) for w in mode.split("_")[1:]]
             scores_p0 = copy.deepcopy(masked_action_probs)
+            reshaped_board = copy.deepcopy(
+                np.array(self.board).reshape(self.grid_shape))
             for action_num in range(self.action_space.n):
                 if actions[action_num] == 1 and action_num != 2200:
-                    reshaped_board = copy.deepcopy(
-                        np.array(self.board).reshape(self.grid_shape))
                     score = greedy_score(
                         movements,
                         action_num,
