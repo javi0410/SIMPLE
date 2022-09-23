@@ -310,7 +310,7 @@ def get_minmax_score(movements, action_num, board, current_player_num, players, 
             if legal == 1:
                 score = greedy_score(
                     movements,
-                    action_num,
+                    poss,
                     new_board,
                     players,
                     opp.id,

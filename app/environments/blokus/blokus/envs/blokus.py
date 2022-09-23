@@ -384,6 +384,9 @@ class BlokusEnv(gym.Env):
         else:
             mode = "greedy_1_0"
 
+        if not mode:
+            mode = "greedy_1_0"
+
         if mode == "n_hot_cells":
 
             for action_num in range(self.action_space.n):
