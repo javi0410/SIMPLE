@@ -456,6 +456,7 @@ class BlokusEnv(gym.Env):
                         reshaped_board,
                         self.players,
                         self.current_player_num,
+                        self.current_player.super_id_pieces,
                         w0,
                         w1
                     )
