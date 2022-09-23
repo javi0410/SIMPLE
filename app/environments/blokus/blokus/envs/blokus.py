@@ -490,6 +490,7 @@ class BlokusEnv(gym.Env):
                         reshaped_board,
                         self.players,
                         self.current_player_num,
+                        self.current_player.super_id_pieces,
                         mode_weights[0],
                         mode_weights[1]
                     )
@@ -506,7 +507,7 @@ class BlokusEnv(gym.Env):
                 if actions[p] == 1:
                     best_plays.append(p)
             for action_num in best_plays:
-                score = get_minmax_score(movements, action_num, reshaped_board, self.current_player_num, self.players, mode_weights)
+                score = get_minmax_score(movements, action_num, reshaped_board, self.current_player_num, self.current_player.super_id_pieces, self.players, mode_weights)
                 score = mode_weights[3]*score + mode_weights[4] * scores_p0[action_num]
                 if actions[action_num] == 1 and action_num != 2200:
                     masked_action_probs[action_num] = score
