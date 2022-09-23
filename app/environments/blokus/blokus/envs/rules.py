@@ -224,7 +224,7 @@ def get_posible_actions_number(movements, reshaped_board, symbol, has_started,
 
     return sum(legal_actions)
 
-def put_piece_in_board(movements, board, player, action_num):
+def put_piece_in_board(movements, board, player, action_num, remaining_pieces):
     reshaped_board = copy.deepcopy(board)
     movement = movements[action_num]
     square, piece_id, piece_super_id, grid = movement
@@ -234,10 +234,10 @@ def put_piece_in_board(movements, board, player, action_num):
         coord_x, coord_y = coordinates
         reshaped_board[x + coord_x][
             y + coord_y] = player.token
-    remaining_pieces = copy.deepcopy(player.super_id_pieces)
-    remaining_pieces.remove(piece_super_id)
+    remaining_pieces_2 = copy.deepcopy(remaining_pieces)
+    remaining_pieces_2.remove(piece_super_id)
 
-    return reshaped_board, remaining_pieces
+    return reshaped_board, remaining_pieces_2
 
 def has_started(board, symbol):
     for x in board:
@@ -246,25 +246,10 @@ def has_started(board, symbol):
                 return True
     return False
 
-def score_actions(movements, new_board, player, player_has_started, player_rem_pieces):
-    p_legal_actions = get_posible_actions(movements, new_board, player.symbol,
-                                           player_has_started, player_rem_pieces)
 
-    for act_p1, leg in enumerate(p_legal_actions):
-        if leg == 1:
-            board_p, rem_pieces_p = put_piece_in_board(movements, new_board,
-                                                         player, act_p1)
-            n = get_posible_actions_number(movements, board_p, player.symbol, True,
-                                           rem_pieces_p)
-            p_legal_actions[act_p1] = n
-            del board_p, rem_pieces_p
-
-    return p_legal_actions
-
-
-def greedy_score(movements, action_num, board, players, current_player_num, w0, w1):
+def greedy_score(movements, action_num, board, players, current_player_num, remaining_pieces_0, w0, w1):
     player = players[current_player_num]
-    new_board, remaining_pieces = put_piece_in_board(movements, board, player, action_num)
+    new_board, remaining_pieces = put_piece_in_board(movements, board, player, action_num, remaining_pieces_0)
     other_players = [
         (current_player_num + 1) % 4,
         (current_player_num + 2) % 4,
@@ -291,7 +276,7 @@ def greedy_score(movements, action_num, board, players, current_player_num, w0, 
     return score
 
 
-def get_minmax_score(movements, action_num, board, current_player_num, players, weights=[], best_cut=5):
+def get_minmax_score(movements, action_num, board, current_player_num, remaining_pieces, players, weights=[], best_cut=5):
     oponents = [
         players[(current_player_num + 1) % 4],
         players[(current_player_num + 2) % 4],
@@ -299,7 +284,7 @@ def get_minmax_score(movements, action_num, board, current_player_num, players, 
     ]
     player = players[current_player_num]
     # Current player
-    new_board, remaining_pieces_p0 = put_piece_in_board(movements, board, player, action_num)
+    new_board, remaining_pieces_p0 = put_piece_in_board(movements, board, player, action_num, remaining_pieces)
     for opp in oponents:
         # create an empty list to store evaluations of possible moves
         final_moves_op = {}
@@ -323,7 +308,7 @@ def get_minmax_score(movements, action_num, board, current_player_num, players, 
             continue
         best_move = max(final_moves_op.keys(), key=(lambda key: final_moves_op[key]))
         # update the board with the highest scoring move
-        new_board, remaining_pieces_p0 = put_piece_in_board(movements, new_board, opp, best_move)
+        new_board, remaining_pieces_p = put_piece_in_board(movements, new_board, opp, best_move, opp.super_id_pieces)
 
     # BOARD HAS BEEN UPDATED; OPPONENTS HAVE FINISHED THEIR TURNS
     possibles_2 = get_posible_actions(movements, new_board, player.token.symbol,
@@ -339,6 +324,7 @@ def get_minmax_score(movements, action_num, board, current_player_num, players, 
                 new_board,
                 players,
                 current_player_num,
+                remaining_pieces_p0,
                 weights[0],
                 weights[1]
             )
