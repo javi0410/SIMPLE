@@ -226,6 +226,9 @@ def get_posible_actions_number(movements, reshaped_board, symbol, has_started,
     return sum(legal_actions)
 
 def put_piece_in_board(movements, board, player, action_num, remaining_pieces):
+    if action_num == 2200:
+        return board, remaining_pieces
+    
     reshaped_board = copy.deepcopy(board)
     movement = movements[action_num]
     square, piece_id, piece_super_id, grid = movement
